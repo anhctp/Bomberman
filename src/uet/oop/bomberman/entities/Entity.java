@@ -7,8 +7,12 @@ import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import uet.oop.bomberman.graphics.Sprite;
 
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+
 public abstract class Entity {
     //Tọa độ X tính từ góc trái trên trong Canvas
+    public boolean goThrough = true;
     protected int x;
 
     //Tọa độ Y tính từ góc trái trên trong Canvas
@@ -21,6 +25,7 @@ public abstract class Entity {
         this.x = xUnit * Sprite.SCALED_SIZE;
         this.y = yUnit * Sprite.SCALED_SIZE;
         this.img = img;
+//        this.addKeyListener(this);
     }
 
     public void render(GraphicsContext gc) {

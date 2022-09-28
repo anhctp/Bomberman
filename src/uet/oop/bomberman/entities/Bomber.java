@@ -1,40 +1,45 @@
 package uet.oop.bomberman.entities;
 
-import javafx.scene.SnapshotParameters;
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.paint.Color;
+import uet.oop.bomberman.BombermanGame;
+import uet.oop.bomberman.Map;
 import uet.oop.bomberman.graphics.Sprite;
 
 public class Bomber extends Entity {
-
+    private static final int STEP = 32;
     public Bomber(int x, int y, Image img) {
-        super(x, y, img);
-    }
-
-    public void moveUp() {
-        img = Sprite.player_up.getFxImage();
-        y -= 32;
-    }
-
-    public void moveDown() {
-        img = Sprite.player_down.getFxImage();
-        y += 32;
-    }
-
-    public void moveLeft() {
-        img = Sprite.player_left.getFxImage();
-        x -= 32;
-    }
-
-    public void moveRight() {
-        img = Sprite.player_right.getFxImage();
-        x += 32;
+        super( x, y, img);
     }
 
     @Override
     public void update() {
 
     }
+
+    public void moveUp() {
+        if(y > 0) {
+            y -= STEP;
+        }
+        this.img = Sprite.player_up.getFxImage();
+    }
+    public void moveDown() {
+        if(y < Map.height * 28) {
+            y += STEP;
+        }
+        this.img = Sprite.player_down.getFxImage();
+    }
+    public void moveLeft() {
+        if(x > 0) {
+            x -= STEP;
+        }
+        this.img = Sprite.player_left.getFxImage();
+    }
+    public void moveRight() {
+        if(x < Map.width * 30) {
+            x += STEP;
+        }
+
+        this.img = Sprite.player_right.getFxImage();
+    }
+
 }
