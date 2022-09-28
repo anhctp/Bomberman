@@ -27,9 +27,16 @@ public abstract class Entity {
         this.img = img;
 //        this.addKeyListener(this);
     }
-
+    public int getX() {
+        return x;
+    }
+    public int getY() {
+        return y;
+    }
     public void render(GraphicsContext gc) {
         gc.drawImage(img, x, y);
     }
     public abstract void update();
+
+
 }

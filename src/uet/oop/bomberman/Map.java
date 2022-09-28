@@ -12,10 +12,19 @@ import java.util.List;
 import java.util.Scanner;
 
 public class Map {
-    public static int width;
-    public static int height;
+    public static int width; // theo o
+    public static int height; // theo o
 
     List<Entity> map = new ArrayList<>();
+
+    public static int getWidth() {
+        return width;
+    }
+
+    public static int getHeight() {
+        return height;
+    }
+
     public void createMap(List<Entity> stillObjects) throws IOException {
 
         FileInputStream file = new FileInputStream("/Users/admin/Downloads/Work/OOP/Game/res/levels/Level1.txt");
@@ -82,7 +91,15 @@ public class Map {
         }
     }
 
-//    public Entity getEntity(int x, int y) {
-//
-//    }
+    public Entity getEntity(int x, int y) {
+        return map.get(fromPosToIndex(x, y));
+    }
+
+    public void changeEntity(int x, int y, Entity entity, List<Entity> stillObjects) {
+        stillObjects.set(fromPosToIndex(x, y), entity);
+    }
+
+    int fromPosToIndex(int x, int y) {
+        return height * x + y;
+    }
 }

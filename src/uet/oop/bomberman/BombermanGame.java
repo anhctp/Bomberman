@@ -56,7 +56,7 @@ public class BombermanGame extends Application {
         AnimationTimer timer = new AnimationTimer() {
             @Override
             public void handle(long l) {
-                render();
+                render(m);
                 update();
             }
         };
@@ -70,18 +70,30 @@ public class BombermanGame extends Application {
             @Override
             public void handle(KeyEvent keyEvent) {
                 switch (keyEvent.getCode()) {
-                    case UP:
-                        bomberman.moveUp();
-
+                    case UP: case W:
+                        if(m.getEntity(bomberman.getX() / 32, bomberman.getY() / 32 - 1).goThrough) {
+                            bomberman.moveUp();
+                        }
                         break;
-                    case DOWN:
-                        bomberman.moveDown();
+                    case DOWN: case S:
+                        if(m.getEntity(bomberman.getX() / 32, bomberman.getY() / 32 + 1).goThrough) {
+                            bomberman.moveDown();
+                        }
                         break;
-                    case LEFT:
-                        bomberman.moveLeft();
+                    case LEFT: case A:
+                        if(m.getEntity(bomberman.getX() / 32 - 1, bomberman.getY() / 32).goThrough) {
+                            bomberman.moveLeft();
+                        }
                         break;
-                    case RIGHT:
-                        bomberman.moveRight();
+                    case RIGHT: case D:
+                        if(m.getEntity(bomberman.getX() / 32 + 1, bomberman.getY() / 32).goThrough) {
+                            bomberman.moveRight();
+                        }
+                        break;
+                    case SPACE:
+                        bomberman.setBomb(bomberman.getX() / 32, bomberman.getY() / 32, m, stillObjects);
+                        break;
+                    default:
                         break;
                 }
             }
@@ -94,9 +106,10 @@ public class BombermanGame extends Application {
         entities.forEach(Entity::update);
     }
 
-    public void render() {
+    public void render(Map m) {
         gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
         stillObjects.forEach(g -> g.render(gc));
+//        m.map.forEach(g -> g.render(gc));
         entities.forEach(g -> g.render(gc));
     }
 }
