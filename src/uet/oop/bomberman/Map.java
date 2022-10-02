@@ -16,6 +16,9 @@ public class Map {
     public static int height;
 
     List<Entity> map = new ArrayList<>();
+
+    public boolean checkUp(Entity entity) {
+    }
     public void createMap(List<Entity> stillObjects) throws IOException {
 
         FileInputStream file = new FileInputStream("/Users/admin/Downloads/Work/OOP/Game/res/levels/Level1.txt");

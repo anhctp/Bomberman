@@ -30,6 +30,7 @@ public class BombermanGame extends Application {
     private Canvas canvas;
     private List<Entity> entities = new ArrayList<>();
     private List<Entity> stillObjects = new ArrayList<>();
+    Map m = new Map();
 
 
 
@@ -37,7 +38,6 @@ public class BombermanGame extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         // Tao Canvas
-        Map m = new Map();
         m.createMap(stillObjects);
         canvas = new Canvas(Sprite.SCALED_SIZE * m.width, Sprite.SCALED_SIZE * m.height);
         gc = canvas.getGraphicsContext2D();
@@ -91,7 +91,7 @@ public class BombermanGame extends Application {
 
 
     public void update() {
-        entities.forEach(Entity::update);
+        entities.forEach(entity -> entity.update(m));
     }
 
     public void render() {
