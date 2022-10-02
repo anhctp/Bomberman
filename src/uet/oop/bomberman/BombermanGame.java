@@ -53,14 +53,6 @@ public class BombermanGame extends Application {
         stage.setTitle("Bomberman Game");
         stage.setScene(scene);
         stage.show();
-        AnimationTimer timer = new AnimationTimer() {
-            @Override
-            public void handle(long l) {
-                render();
-                update();
-            }
-        };
-        timer.start();
 
 
 
@@ -70,25 +62,54 @@ public class BombermanGame extends Application {
             @Override
             public void handle(KeyEvent keyEvent) {
                 switch (keyEvent.getCode()) {
-                    case UP:
-                        bomberman.moveUp();
-
+                    case UP: case W:
+                        if(m.getEntity(bomberman.getX() / 32, bomberman.getY() / 32 - 1).goThrough) {
+                            bomberman.moveUp();
+                        }
                         break;
-                    case DOWN:
-                        bomberman.moveDown();
+                    case DOWN: case S:
+                        if(m.getEntity(bomberman.getX() / 32, bomberman.getY() / 32 + 1).goThrough) {
+                            bomberman.moveDown();
+                        }
                         break;
-                    case LEFT:
-                        bomberman.moveLeft();
+                    case LEFT: case A:
+                        if(m.getEntity(bomberman.getX() / 32 - 1, bomberman.getY() / 32).goThrough) {
+                            bomberman.moveLeft();
+                        }
                         break;
-                    case RIGHT:
-                        bomberman.moveRight();
+                    case RIGHT: case D:
+                        if(m.getEntity(bomberman.getX() / 32 + 1, bomberman.getY() / 32).goThrough) {
+                            bomberman.moveRight();
+                        }
+                        break;
+                    case SPACE:
+                        bomberman.setBomb(bomberman.getX() / 32, bomberman.getY() / 32, m, stillObjects);
+                        break;
+                    default:
                         break;
                 }
             }
         });
         entities.add(bomberman);
+        addBalloom();
+
+        AnimationTimer timer = new AnimationTimer() {
+            @Override
+            public void handle(long l) {
+                render();
+                update();
+            }
+        };
+        timer.start();
     }
 
+    public void addBalloom() {
+        for(Entity entity : m.getObjects()) {
+            if (entity instanceof Balloom) {
+                entities.add(entity);
+            }
+        }
+    }
 
     public void update() {
         entities.forEach(entity -> entity.update(m));
