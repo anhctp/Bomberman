@@ -12,6 +12,7 @@ public class Bomber extends Entity {
     private int numOfBomb = 1;
     public Bomber(int x, int y, Image img) {
         super( x, y, img);
+        this.velocity = 16;
     }
 
     @Override

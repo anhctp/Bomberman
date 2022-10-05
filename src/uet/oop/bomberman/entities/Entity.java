@@ -13,6 +13,7 @@ import java.awt.event.KeyListener;
 
 public abstract class Entity {
     //Tọa độ X tính từ góc trái trên trong Canvas
+    protected int velocity = 0;
     public boolean goThrough = true;
     protected int x;
 
@@ -28,6 +29,15 @@ public abstract class Entity {
         this.img = img;
 //        this.addKeyListener(this);
     }
+
+    public int getVelocity() {
+        return velocity;
+    }
+
+    public void setVelocity(int velocity) {
+        this.velocity = velocity;
+    }
+
     public int getX() {
         return x;
     }

@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.Random;
 
 public class Enemy extends Entity{
-    protected int velocity = 1;
     protected STATE state = null;
     protected int num = 1;
 
@@ -29,15 +28,6 @@ public class Enemy extends Entity{
             return VALUES.get(RANDOM.nextInt(SIZE));
         }
     }
-
-    public int getVelocity() {
-        return velocity;
-    }
-
-    public void setVelocity(int velocity) {
-        this.velocity = velocity;
-    }
-
     public STATE getState() {
         return state;
     }
@@ -56,6 +46,7 @@ public class Enemy extends Entity{
 
     public Enemy(int xUnit, int yUnit, Image img) {
         super(xUnit, yUnit, img);
+        velocity = 10;
     }
 
     public void moveUp() {

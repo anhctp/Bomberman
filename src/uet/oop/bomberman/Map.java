@@ -36,29 +36,33 @@ public class Map {
 
 
     public boolean checkUp(Entity entity) {
-        if (getEntity(entity.getX() / 32, entity.getY() / 32 - 1).goThrough) {
+        if (getEntity(entity.getX() / 32, (entity.getY() - entity.getVelocity()) / 32).goThrough) {
             return true;
         }
         return false;
     }
+
     public boolean checkDown(Entity entity) {
-        if (getEntity(entity.getX() / 32, entity.getY() / 32 + 1).goThrough) {
+        if (getEntity((entity.getX() + Sprite.DEFAULT_SIZE) / 32, (entity.getY() + entity.getVelocity() + Sprite.SCALED_SIZE) / 32).goThrough) {
             return true;
         }
         return false;
     }
+
     public boolean checkLeft(Entity entity) {
-        if (getEntity(entity.getX() / 32 - 1, entity.getY() / 32).goThrough) {
+        if (getEntity((entity.getX() - entity.getVelocity()) / 32, entity.getY() / 32).goThrough) {
             return true;
         }
         return false;
     }
+
     public boolean checkRight(Entity entity) {
-        if (getEntity(entity.getX() / 32 + 1, entity.getY() / 32).goThrough) {
+        if (getEntity((entity.getX() + entity.getVelocity() + Sprite.SCALED_SIZE) / 32, (entity.getY() + Sprite.DEFAULT_SIZE) / 32).goThrough) {
             return true;
         }
         return false;
     }
+
     public void createMap(List<Entity> stillObjects) throws IOException {
 
         FileInputStream file = new FileInputStream("res\\levels\\Level2.txt");
@@ -74,8 +78,8 @@ public class Map {
         BufferedReader br = new BufferedReader(fr);  //Creation of BufferedReader object
         String s = br.readLine();
         char[][] cMap = new char[row][col];
-        for(int i = 0; i < row; i++) {
-            for(int j = 0; j < col; j++) {
+        for (int i = 0; i < row; i++) {
+            for (int j = 0; j < col; j++) {
                 int c = 0;
                 c = br.read();
                 char ch = (char) c;
@@ -96,14 +100,14 @@ public class Map {
                         object = new Brick(i, j, Sprite.brick.getFxImage());
                         break;
                     case 'x':
-                        object = new Portal(i, j, Sprite.wall.getFxImage());
+                        object = new Portal(i, j, Sprite.portal.getFxImage());
                         break;
 //                    case 'p':
 //                       object = new Bomber(i, j, Sprite.bomber)
 //                        break;
                     case '1':
                         object = new Grass(i, j, Sprite.grass.getFxImage());
-                        objectName = new Balloom(i,j,Sprite.balloom_left1.getFxImage());
+                        objectName = new Balloom(i, j, Sprite.balloom_left1.getFxImage());
                         break;
 //                    case '2':
 //                        object = new Oneal();

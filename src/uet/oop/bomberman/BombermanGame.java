@@ -63,22 +63,26 @@ public class BombermanGame extends Application {
             public void handle(KeyEvent keyEvent) {
                 switch (keyEvent.getCode()) {
                     case UP: case W:
-                        if(m.getEntity(bomberman.getX() / 32, bomberman.getY() / 32 - 1).goThrough) {
+                        if(m.checkUp(bomberman)) {
+                            System.out.println("bomberUp");
                             bomberman.moveUp();
                         }
                         break;
                     case DOWN: case S:
-                        if(m.getEntity(bomberman.getX() / 32, bomberman.getY() / 32 + 1).goThrough) {
+                        if(m.checkDown(bomberman)) {
+                            System.out.println("bomberDown");
                             bomberman.moveDown();
                         }
                         break;
                     case LEFT: case A:
-                        if(m.getEntity(bomberman.getX() / 32 - 1, bomberman.getY() / 32).goThrough) {
+                        if(m.checkLeft(bomberman)) {
+                            System.out.println("bomberLeft");
                             bomberman.moveLeft();
                         }
                         break;
                     case RIGHT: case D:
-                        if(m.getEntity(bomberman.getX() / 32 + 1, bomberman.getY() / 32).goThrough) {
+                        if(m.checkRight(bomberman)) {
+                            System.out.println("bomberRight");
                             bomberman.moveRight();
                         }
                         break;

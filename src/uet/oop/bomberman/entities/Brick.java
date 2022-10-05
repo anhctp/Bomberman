@@ -9,7 +9,6 @@ public class Brick extends Entity{
         super(x, y, img);
         goThrough = false;
     }
-
     @Override
     public void update(Map m) {
 
