@@ -14,6 +14,7 @@ public abstract class Entity {
     //Tọa độ X tính từ góc trái trên trong Canvas
     public boolean goThrough = true;
     protected int x;
+    protected boolean appear = true;
 
     //Tọa độ Y tính từ góc trái trên trong Canvas
     protected int y;
@@ -27,6 +28,10 @@ public abstract class Entity {
         this.img = img;
 //        this.addKeyListener(this);
     }
+    public boolean getAppear() {
+        return appear;
+    }
+
     public int getX() {
         return x;
     }
@@ -34,7 +39,9 @@ public abstract class Entity {
         return y;
     }
     public void render(GraphicsContext gc) {
-        gc.drawImage(img, x, y);
+        if(appear) {
+            gc.drawImage(img, x, y);
+        }
     }
     public abstract void update();
 
