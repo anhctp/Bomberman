@@ -30,6 +30,7 @@ public class BombermanGame extends Application {
     private Canvas canvas;
     private List<Entity> entities = new ArrayList<>();
     private List<Entity> stillObjects = new ArrayList<>();
+    Map m = new Map();
 
 
 
@@ -37,7 +38,6 @@ public class BombermanGame extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         // Tao Canvas
-        Map m = new Map();
         m.createMap(stillObjects);
         canvas = new Canvas(Sprite.SCALED_SIZE * m.width, Sprite.SCALED_SIZE * m.height);
         gc = canvas.getGraphicsContext2D();
@@ -71,10 +71,20 @@ public class BombermanGame extends Application {
             public void handle(KeyEvent keyEvent) {
                 switch (keyEvent.getCode()) {
                     case UP: case W:
+                        if(m.checkUp(bomberman)) {
+                            System.out.println("bomberUp");
+                            bomberman.moveUp();
+                        }
+                    case UP: case W:
                         if(m.getEntity(bomberman.getX() / 32, bomberman.getY() / 32 - 1).goThrough) {
                             bomberman.moveUp();
                         }
                         break;
+                    case DOWN: case S:
+                        if(m.checkDown(bomberman)) {
+                            System.out.println("bomberDown");
+                            bomberman.moveDown();
+                        }
                     case DOWN: case S:
                         if(m.getEntity(bomberman.getX() / 32, bomberman.getY() / 32 + 1).goThrough) {
                             bomberman.moveDown();
@@ -82,6 +92,11 @@ public class BombermanGame extends Application {
                         break;
                     case LEFT: case A:
                         if(m.getEntity(bomberman.getX() / 32 - 1, bomberman.getY() / 32).goThrough) {
+                            bomberman.moveLeft();
+                        }
+                    case LEFT: case A:
+                        if(m.checkLeft(bomberman)) {
+                            System.out.println("bomberLeft");
                             bomberman.moveLeft();
                         }
                         break;
@@ -94,16 +109,43 @@ public class BombermanGame extends Application {
                         bomberman.setBomb(bomberman.getX() / 32, bomberman.getY() / 32, m, stillObjects);
                         break;
                     default:
+                    case RIGHT: case D:
+                        if(m.checkRight(bomberman)) {
+                            System.out.println("bomberRight");
+                            bomberman.moveRight();
+                        }
+                        break;
+                    case SPACE:
+                        bomberman.setBomb(bomberman.getX() / 32, bomberman.getY() / 32, m, stillObjects);
+                        break;
+                    default:
                         break;
                 }
             }
         });
         entities.add(bomberman);
+        addBalloom();
+
+        AnimationTimer timer = new AnimationTimer() {
+            @Override
+            public void handle(long l) {
+                render();
+                update();
+            }
+        };
+        timer.start();
     }
 
+    public void addBalloom() {
+        for(Entity entity : m.getObjects()) {
+            if (entity instanceof Balloom) {
+                entities.add(entity);
+            }
+        }
+    }
 
     public void update() {
-        entities.forEach(Entity::update);
+        entities.forEach(entity -> entity.update(m));
     }
 
     public void render(Map m) {

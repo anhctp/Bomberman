@@ -5,6 +5,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
+import uet.oop.bomberman.Map;
 import uet.oop.bomberman.graphics.Sprite;
 
 import java.awt.event.KeyEvent;
@@ -12,6 +13,7 @@ import java.awt.event.KeyListener;
 
 public abstract class Entity {
     //Tọa độ X tính từ góc trái trên trong Canvas
+    protected int velocity = 0;
     public boolean goThrough = true;
     protected int x;
 
@@ -27,6 +29,21 @@ public abstract class Entity {
         this.img = img;
 //        this.addKeyListener(this);
     }
+
+    public int getVelocity() {
+        return velocity;
+    }
+
+    public void setVelocity(int velocity) {
+        this.velocity = velocity;
+    }
+
+    public int getX() {
+        return x;
+    }
+    public int getY() {
+        return y;
+    }
     public int getX() {
         return x;
     }
@@ -39,4 +56,6 @@ public abstract class Entity {
     public abstract void update();
 
 
+
+    public abstract void update(Map m);
 }

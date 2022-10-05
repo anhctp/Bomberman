@@ -1,6 +1,7 @@
 package uet.oop.bomberman.entities;
 
 import javafx.scene.image.Image;
+import uet.oop.bomberman.Map;
 
 public class Brick extends Entity{
 
@@ -8,9 +9,8 @@ public class Brick extends Entity{
         super(x, y, img);
         goThrough = false;
     }
-
     @Override
-    public void update() {
+    public void update(Map m) {
 
     }
 }
