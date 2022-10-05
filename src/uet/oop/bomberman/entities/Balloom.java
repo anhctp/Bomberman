@@ -46,42 +46,33 @@ public class Balloom extends Enemy {
             switch (state) {
                 case RIGHT:
                     if (m.checkRight(this)) {
-                        System.out.println("rightBallom");
                         this.setState(Enemy.STATE.RIGHT);
                         moveRight();
                         setImg();
-                        System.out.println(x + "Bl");
                     } else state = null;
                     break;
                 case LEFT:
                     if (m.checkLeft(this)) {
-                        System.out.println("leftBallom");
                         this.setState(Enemy.STATE.LEFT);
                         moveLeft();
                         setImg();
-                        System.out.println(x + "Bl");
                     } else state = null;
                     break;
                 case UP:
                     if (m.checkUp(this)) {
-                        System.out.println("upBallom");
                         this.setState(Enemy.STATE.UP);
                         moveUp();
                         setImg();
-                        System.out.println(y+ "Bl");
                     } else state = null;
                     break;
                 case DOWN:
                     if (m.checkDown(this)) {
-                        System.out.println("downBallom");
                         this.setState(Enemy.STATE.DOWN);
                         moveDown();
                         setImg();
-                        System.out.println(y+ "Bl");
                     } else state = null;
                     break;
                 case DEAD:
-                    System.out.println("dead");
                     setImg();
                     break;
             }
