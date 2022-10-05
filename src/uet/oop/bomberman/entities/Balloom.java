@@ -82,11 +82,11 @@ public class Balloom extends Enemy {
 
     @Override
     public void update(Map m) {
-        try {
-            Thread.sleep(270);
-        } catch (InterruptedException ex) {
-            Thread.currentThread().interrupt();
-        }
+//        try {
+//            Thread.sleep(270);
+//        } catch (InterruptedException ex) {
+//            Thread.currentThread().interrupt();
+//        }
         logicBalloom(m);
     }
 }

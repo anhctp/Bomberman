@@ -36,7 +36,7 @@ public class Map {
 
 
     public boolean checkUp(Entity entity) {
-        if (getEntity(entity.getX() / 32, (entity.getY() - entity.getVelocity()) / 32).goThrough) {
+        if (getEntity((entity.getX() + Sprite.DEFAULT_SIZE) / 32, (entity.getY() - entity.getVelocity()) / 32).goThrough) {
             return true;
         }
         return false;
