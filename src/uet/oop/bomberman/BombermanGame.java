@@ -56,14 +56,11 @@ public class BombermanGame extends Application {
         AnimationTimer timer = new AnimationTimer() {
             @Override
             public void handle(long l) {
-                render(m);
+                render();
                 update();
             }
         };
         timer.start();
-
-
-
         Bomber bomberman = new Bomber(1, 1, Sprite.player_right.getFxImage());
 
         scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
@@ -121,6 +118,7 @@ public class BombermanGame extends Application {
                     default:
                         break;
                 }
+                bomberman.handleEvent(keyEvent, m, entities, stillObjects, gc);
             }
         });
         entities.add(bomberman);
@@ -145,13 +143,14 @@ public class BombermanGame extends Application {
     }
 
     public void update() {
+        entities.forEach(Entity::update);
+//        stillObjects.forEach(Entity::update);
         entities.forEach(entity -> entity.update(m));
     }
 
-    public void render(Map m) {
+    public void render() {
         gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
         stillObjects.forEach(g -> g.render(gc));
-//        m.map.forEach(g -> g.render(gc));
         entities.forEach(g -> g.render(gc));
     }
 }
