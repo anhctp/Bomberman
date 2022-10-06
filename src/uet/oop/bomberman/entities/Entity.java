@@ -38,6 +38,7 @@ public abstract class Entity {
     public void setVelocity(int velocity) {
         this.velocity = velocity;
     }
+    public abstract void update(Map m);
 
     public int getX() {
         return x;
@@ -49,20 +50,10 @@ public abstract class Entity {
         return appear;
     }
 
-    public int getX() {
-        return x;
-    }
-    public int getY() {
-        return y;
-    }
     public void render(GraphicsContext gc) {
         if(appear) {
             gc.drawImage(img, x, y);
         }
     }
-    public abstract void update();
 
-
-
-    public abstract void update(Map m);
 }

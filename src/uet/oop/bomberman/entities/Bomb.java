@@ -34,7 +34,6 @@ public class Bomb extends Entity {
         entities.add(bomb);
     }
     @Override
-    public void update() {
     public void update(Map m) {
         updateBomb();
         if(beforeExplodeTime == 0) {

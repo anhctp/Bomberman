@@ -23,8 +23,6 @@ public class Bomber extends Entity {
 
     @Override
     public void update(Map m) {
-
-    public void update() {
         for(int i = 0; i < bombs.size(); i++) {
             if(bombs.get(i).getIsExplode()) {
                 bombs.remove(bombs.get(i));

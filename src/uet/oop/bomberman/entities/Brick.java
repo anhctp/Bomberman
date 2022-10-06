@@ -3,7 +3,7 @@ package uet.oop.bomberman.entities;
 import javafx.scene.image.Image;
 import uet.oop.bomberman.Map;
 
-public class Brick extends Entity{
+public class Brick extends Entity {
     private boolean exploded = false;
 
     public Brick(int x, int y, Image img) {
@@ -21,10 +21,9 @@ public class Brick extends Entity{
 
     @Override
     public void update(Map m) {
-    public void update() {
-        if(exploded) {
+        if (exploded) {
             appear = false;
         }
     }
-
 }
+

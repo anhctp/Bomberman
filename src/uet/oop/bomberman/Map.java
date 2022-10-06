@@ -36,14 +36,6 @@ public class Map {
         this.objects = objects;
     }
 
-    public static int getWidth() {
-        return width;
-    }
-
-    public static int getHeight() {
-        return height;
-    }
-
 
     public boolean checkUp(Entity entity) {
         if (getEntity((entity.getX() + Sprite.DEFAULT_SIZE) / 32, (entity.getY() - entity.getVelocity()) / 32).goThrough) {
@@ -73,9 +65,10 @@ public class Map {
         return false;
     }
 
+
     public void createMap(List<Entity> stillObjects) throws IOException {
 
-        FileInputStream file = new FileInputStream("res\\levels\\Level2.txt");
+        FileInputStream file = new FileInputStream("/Users/admin/Downloads/Work/OOP/Bomberman/res/levels/Level1.txt");
         Scanner scanner = new Scanner(file);
         int level = scanner.nextInt();
         int row = scanner.nextInt();
@@ -84,8 +77,8 @@ public class Map {
         width = col;
         height = row;
 
-        FileReader fr = new FileReader("res\\levels\\Level2.txt");   //Creation of File Reader object
-        FileReader fr = new FileReader("/Users/admin/Downloads/Work/OOP/GameProject/res/levels/Level1.txt");   //Creation of File Reader object
+//        FileReader fr = new FileReader("res\\levels\\Level2.txt");   //Creation of File Reader object
+        FileReader fr = new FileReader("/Users/admin/Downloads/Work/OOP/Bomberman/res/levels/Level1.txt");   //Creation of File Reader object
         BufferedReader br = new BufferedReader(fr);  //Creation of BufferedReader object
         String s = br.readLine();
         char[][] cMap = new char[row][col];

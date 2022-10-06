@@ -1,6 +1,7 @@
 package uet.oop.bomberman.entities;
 
 import javafx.scene.image.Image;
+import uet.oop.bomberman.Map;
 
 public class Flame extends Entity{
 //    private static int time = 120;
@@ -13,7 +14,7 @@ public class Flame extends Entity{
 //    }
 
     @Override
-    public void update() {
+    public void update(Map m) {
 //        if(time == 0) {
 //            appear = false;
 //            return;
