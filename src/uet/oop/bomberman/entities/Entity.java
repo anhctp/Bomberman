@@ -13,8 +13,10 @@ import java.awt.event.KeyListener;
 
 public abstract class Entity {
     //Tọa độ X tính từ góc trái trên trong Canvas
+    protected int velocity = 0;
     public boolean goThrough = true;
     protected int x;
+    protected boolean appear = true;
 
     //Tọa độ Y tính từ góc trái trên trong Canvas
     protected int y;
@@ -28,17 +30,30 @@ public abstract class Entity {
         this.img = img;
 //        this.addKeyListener(this);
     }
+
+    public int getVelocity() {
+        return velocity;
+    }
+
+    public void setVelocity(int velocity) {
+        this.velocity = velocity;
+    }
+    public abstract void update(Map m);
+
     public int getX() {
         return x;
     }
     public int getY() {
         return y;
     }
-    public void render(GraphicsContext gc) {
-        gc.drawImage(img, x, y);
+    public boolean getAppear() {
+        return appear;
     }
-    public abstract void update();
 
+    public void render(GraphicsContext gc) {
+        if(appear) {
+            gc.drawImage(img, x, y);
+        }
+    }
 
-    public abstract void update(Map m);
 }

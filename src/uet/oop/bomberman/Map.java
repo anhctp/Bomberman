@@ -1,5 +1,6 @@
 package uet.oop.bomberman;
 
+import javafx.scene.canvas.GraphicsContext;
 import uet.oop.bomberman.entities.*;
 import uet.oop.bomberman.graphics.Sprite;
 
@@ -25,12 +26,49 @@ public class Map {
         return height;
     }
 
+    private List<Entity> objects = new ArrayList<>();
+
+    public List<Entity> getObjects() {
+        return objects;
+    }
+
+    public void setObjects(List<Entity> objects) {
+        this.objects = objects;
+    }
+
 
     public boolean checkUp(Entity entity) {
+        if (getEntity((entity.getX() + Sprite.DEFAULT_SIZE) / 32, (entity.getY() - entity.getVelocity()) / 32).goThrough) {
+            return true;
+        }
+        return false;
     }
+
+    public boolean checkDown(Entity entity) {
+        if (getEntity((entity.getX() + Sprite.DEFAULT_SIZE) / 32, (entity.getY() + entity.getVelocity() + Sprite.SCALED_SIZE) / 32).goThrough) {
+            return true;
+        }
+        return false;
+    }
+
+    public boolean checkLeft(Entity entity) {
+        if (getEntity((entity.getX() - entity.getVelocity()) / 32, entity.getY() / 32).goThrough) {
+            return true;
+        }
+        return false;
+    }
+
+    public boolean checkRight(Entity entity) {
+        if (getEntity((entity.getX() + entity.getVelocity() + Sprite.SCALED_SIZE) / 32, (entity.getY() + Sprite.DEFAULT_SIZE) / 32).goThrough) {
+            return true;
+        }
+        return false;
+    }
+
+
     public void createMap(List<Entity> stillObjects) throws IOException {
 
-        FileInputStream file = new FileInputStream("/Users/admin/Downloads/Work/OOP/Game/res/levels/Level1.txt");
+        FileInputStream file = new FileInputStream("/Users/admin/Downloads/Work/OOP/Bomberman/res/levels/Level1.txt");
         Scanner scanner = new Scanner(file);
         int level = scanner.nextInt();
         int row = scanner.nextInt();
@@ -39,12 +77,13 @@ public class Map {
         width = col;
         height = row;
 
-        FileReader fr = new FileReader("/Users/admin/Downloads/Work/OOP/Game/res/levels/Level1.txt");   //Creation of File Reader object
+//        FileReader fr = new FileReader("res\\levels\\Level2.txt");   //Creation of File Reader object
+        FileReader fr = new FileReader("/Users/admin/Downloads/Work/OOP/Bomberman/res/levels/Level1.txt");   //Creation of File Reader object
         BufferedReader br = new BufferedReader(fr);  //Creation of BufferedReader object
         String s = br.readLine();
         char[][] cMap = new char[row][col];
-        for(int i = 0; i < row; i++) {
-            for(int j = 0; j < col; j++) {
+        for (int i = 0; i < row; i++) {
+            for (int j = 0; j < col; j++) {
                 int c = 0;
                 c = br.read();
                 char ch = (char) c;
@@ -56,6 +95,7 @@ public class Map {
         for (int i = 0; i < col; i++) {
             for (int j = 0; j < row; j++) {
                 Entity object;
+                Entity objectName = null;
                 switch (cMap[j][i]) {
                     case '#':
                         object = new Wall(i, j, Sprite.wall.getFxImage());
@@ -64,14 +104,15 @@ public class Map {
                         object = new Brick(i, j, Sprite.brick.getFxImage());
                         break;
                     case 'x':
-                        object = new Portal(i, j, Sprite.wall.getFxImage());
+                        object = new Portal(i, j, Sprite.portal.getFxImage());
                         break;
 //                    case 'p':
 //                       object = new Bomber(i, j, Sprite.bomber)
 //                        break;
-//                    case '1':
-//                        object = new Balloon();
-//                        break;
+                    case '1':
+                        object = new Grass(i, j, Sprite.grass.getFxImage());
+                        objectName = new Balloom(i, j, Sprite.balloom_left1.getFxImage());
+                        break;
 //                    case '2':
 //                        object = new Oneal();
 //                        break;
@@ -85,9 +126,13 @@ public class Map {
                         object = new Grass(i, j, Sprite.grass.getFxImage());
                         break;
                     default:
-                        throw new IllegalStateException("Unexpected value: " + cMap[j][i]);
+                        object = new Grass(i, j, Sprite.grass.getFxImage());
+//                        throw new IllegalStateException("Unexpected value: " + cMap[j][i]);
                 }
                 stillObjects.add(object);
+                if (objectName != null) {
+                    objects.add(objectName);
+                }
                 map.add(object);
             }
             String ss = br.readLine();
@@ -104,5 +149,28 @@ public class Map {
 
     int fromPosToIndex(int x, int y) {
         return height * x + y;
+    }
+    public void printMap(List<Entity> stillObjects, GraphicsContext gc) {
+        for(int i = 0; i < stillObjects.size(); i++) {
+            stillObjects.get(i).render(gc);
+        }
+    }
+    public void updateAfterExplode(int x, int y, List<Entity> stillObjects) {
+        if(getEntity(x / 32, y / 32 - 1) instanceof Brick) {
+            Grass grass = new Grass(x / 32, y / 32 - 1, Sprite.grass.getFxImage());
+            changeEntity(x / 32, y / 32 - 1, grass, stillObjects);
+        }
+        if(getEntity(x / 32, y / 32 + 1) instanceof Brick) {
+            Grass grass = new Grass(x / 32, y / 32 + 1, Sprite.grass.getFxImage());
+            changeEntity(x / 32, y / 32 + 1, grass, stillObjects);
+        }
+        if(getEntity(x / 32 - 1, y / 32) instanceof Brick) {
+            Grass grass = new Grass(x / 32 - 1, y / 32, Sprite.grass.getFxImage());
+            changeEntity(x / 32 - 1, y / 32, grass, stillObjects);
+        }
+        if(getEntity(x / 32 + 1, y / 32) instanceof Brick) {
+            Grass grass = new Grass(x / 32 + 1, y / 32, Sprite.grass.getFxImage());
+            changeEntity(x / 32 + 1, y / 32, grass, stillObjects);
+        }
     }
 }
