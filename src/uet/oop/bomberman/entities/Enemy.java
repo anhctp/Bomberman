@@ -46,7 +46,7 @@ public class Enemy extends Entity{
 
     public Enemy(int xUnit, int yUnit, Image img) {
         super(xUnit, yUnit, img);
-        velocity = 10;
+        velocity = 8;
     }
 
     public void moveUp() {

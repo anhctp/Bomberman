@@ -38,20 +38,23 @@ public class Map {
 
 
     public boolean checkUp(Entity entity) {
-        if (getEntity((entity.getX() + Sprite.DEFAULT_SIZE) / 32, (entity.getY() - entity.getVelocity()) / 32).goThrough) {
+//        if (getEntity((entity.getX() + Sprite.DEFAULT_SIZE) / 32, (entity.getY() - entity.getVelocity()) / 32).goThrough) {
+        if (getEntity((entity.getX()) / 32, (entity.getY() - entity.getVelocity()) / 32).goThrough) {
             return true;
         }
         return false;
     }
 
     public boolean checkDown(Entity entity) {
-        if (getEntity((entity.getX() + Sprite.DEFAULT_SIZE) / 32, (entity.getY() + entity.getVelocity() + Sprite.SCALED_SIZE) / 32).goThrough) {
+//        if (getEntity((entity.getX() + Sprite.DEFAULT_SIZE) / 32, (entity.getY() + entity.getVelocity() + Sprite.SCALED_SIZE) / 32).goThrough) {
+        if (getEntity((entity.getX() + Sprite.DEFAULT_SIZE) / 32, (entity.getY()  + 2 * Sprite.DEFAULT_SIZE) / 32).goThrough) {
             return true;
         }
         return false;
     }
 
     public boolean checkLeft(Entity entity) {
+        //if (getEntity((entity.getX() - entity.getVelocity()) / 32, entity.getY() / 32).goThrough) {
         if (getEntity((entity.getX() - entity.getVelocity()) / 32, entity.getY() / 32).goThrough) {
             return true;
         }
@@ -59,7 +62,8 @@ public class Map {
     }
 
     public boolean checkRight(Entity entity) {
-        if (getEntity((entity.getX() + entity.getVelocity() + Sprite.SCALED_SIZE) / 32, (entity.getY() + Sprite.DEFAULT_SIZE) / 32).goThrough) {
+        //if (getEntity((entity.getX() + entity.getVelocity() + Sprite.SCALED_SIZE) / 32, (entity.getY() + Sprite.DEFAULT_SIZE) / 32).goThrough) {
+        if (getEntity((entity.getX()  + 2 * Sprite.DEFAULT_SIZE) / 32, (entity.getY() + Sprite.DEFAULT_SIZE) / 32).goThrough) {
             return true;
         }
         return false;

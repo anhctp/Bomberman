@@ -5,6 +5,9 @@ import uet.oop.bomberman.Map;
 import uet.oop.bomberman.graphics.Sprite;
 
 public class Balloom extends Enemy {
+    private int time = 10;
+    private boolean appear = false;
+
     public Balloom(int xUnit, int yUnit, Image img) {
         super(xUnit, yUnit, img);
     }
@@ -79,14 +82,21 @@ public class Balloom extends Enemy {
         } else state = Enemy.STATE.randomLetter();
     }
 
+    public void countDown() {
+        if (time == 0) {
+            appear = true;
+            time = 10;
+        } else {
+            time--;
+            appear = false;
+        }
+    }
 
     @Override
     public void update(Map m) {
-//        try {
-//            Thread.sleep(270);
-//        } catch (InterruptedException ex) {
-//            Thread.currentThread().interrupt();
-//        }
-        logicBalloom(m);
+        countDown();
+        if (appear) {
+            logicBalloom(m);
+        }
     }
 }
