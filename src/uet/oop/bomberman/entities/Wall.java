@@ -10,7 +10,7 @@ public class Wall extends Entity {
         goThrough = false;
     }
     @Override
-    public void update(Map m) {
+    public void update() {
 
     }
 }

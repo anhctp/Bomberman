@@ -14,7 +14,7 @@ public class Flame extends Entity{
 //    }
 
     @Override
-    public void update(Map m) {
+    public void update() {
 //        if(time == 0) {
 //            appear = false;
 //            return;

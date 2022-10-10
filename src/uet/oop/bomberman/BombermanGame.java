@@ -28,9 +28,9 @@ public class BombermanGame extends Application {
 
     private GraphicsContext gc;
     private Canvas canvas;
-    private List<Entity> entities = new ArrayList<>();
+    public static List<Entity> entities = new ArrayList<>();
+    public static Map m = new Map();
     private List<Entity> stillObjects = new ArrayList<>();
-    Map m = new Map();
 
     @Override
     public void start(Stage stage) throws IOException {
@@ -81,9 +81,9 @@ public class BombermanGame extends Application {
     }
 
     public void update() {
-//        entities.forEach(Entity::update);
+        entities.forEach(Entity::update);
 //        stillObjects.forEach(Entity::update);
-        entities.forEach(entity -> entity.update(m));
+//        entities.forEach(entity -> entity.update(m));
     }
 
     public void render() {

@@ -4,39 +4,30 @@ import javafx.scene.image.Image;
 import uet.oop.bomberman.Map;
 import uet.oop.bomberman.graphics.Sprite;
 
+import static uet.oop.bomberman.BombermanGame.m;
+
 public class Balloom extends Enemy {
-    private int time = 10;
-    private boolean appear = false;
 
     public Balloom(int xUnit, int yUnit, Image img) {
         super(xUnit, yUnit, img);
     }
 
+    @Override
     public void setImg() {
         switch (state) {
             case LEFT:
-                if (num == 1) {
-                    this.img = Sprite.balloom_left1.getFxImage();
-                    num = 2;
-                } else if (num == 2) {
-                    this.img = Sprite.balloom_left2.getFxImage();
-                    num = 3;
-                } else if (num == 3) {
-                    this.img = Sprite.balloom_left3.getFxImage();
+                num++;
+                if (num > 3) {
                     num = 1;
                 }
+                this.img = Sprite.movingSprite(Sprite.balloom_left1, Sprite.balloom_left2, Sprite.balloom_left3, num, 4).getFxImage();
                 break;
             case RIGHT:
-                if (num == 1) {
-                    this.img = Sprite.balloom_right1.getFxImage();
-                    num = 2;
-                } else if (num == 2) {
-                    this.img = Sprite.balloom_right2.getFxImage();
-                    num = 3;
-                } else if (num == 3) {
-                    this.img = Sprite.balloom_right3.getFxImage();
+                num++;
+                if (num > 3) {
                     num = 1;
                 }
+                this.img = Sprite.movingSprite(Sprite.balloom_right1, Sprite.balloom_right2, Sprite.balloom_right3, num, 4).getFxImage();
                 break;
             case DEAD:
                 this.img = Sprite.balloom_dead.getFxImage();
@@ -77,23 +68,20 @@ public class Balloom extends Enemy {
                     break;
                 case DEAD:
                     setImg();
+                    isDead = true;
                     break;
             }
         } else state = Enemy.STATE.randomLetter();
     }
-
-    public void countDown() {
-        if (time == 0) {
-            appear = true;
-            time = 10;
-        } else {
-            time--;
-            appear = false;
-        }
-    }
-
     @Override
-    public void update(Map m) {
+    public void update() {
+        if (isDead) {
+            if (timeDead == 0) {
+                dead(this);
+                appear = false;
+            }
+            else timeDead--;
+        }
         countDown();
         if (appear) {
             logicBalloom(m);

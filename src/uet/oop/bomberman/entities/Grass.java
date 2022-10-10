@@ -9,7 +9,7 @@ public class Grass extends Entity {
         super(x, y, img);
     }
     @Override
-    public void update(Map m) {
+    public void update() {
 
     }
 }

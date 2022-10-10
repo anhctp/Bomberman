@@ -9,7 +9,7 @@ public class Portal extends Entity{
         goThrough = false;
     }
     @Override
-    public void update(Map m) {
+    public void update() {
 
     }
 }

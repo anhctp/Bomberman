@@ -20,7 +20,7 @@ public class Brick extends Entity {
     }
 
     @Override
-    public void update(Map m) {
+    public void update() {
         if (exploded) {
             appear = false;
         }
