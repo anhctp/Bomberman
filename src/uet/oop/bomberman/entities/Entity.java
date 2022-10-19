@@ -13,7 +13,7 @@ import java.awt.event.KeyListener;
 
 public abstract class Entity {
     //Tọa độ X tính từ góc trái trên trong Canvas
-    protected int velocity = 0;
+    protected int velocity = 8;
     public boolean goThrough = true;
     protected int x;
     protected boolean appear = true;

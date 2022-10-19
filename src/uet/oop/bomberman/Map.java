@@ -2,6 +2,8 @@ package uet.oop.bomberman;
 
 import javafx.scene.canvas.GraphicsContext;
 import uet.oop.bomberman.entities.*;
+import uet.oop.bomberman.entities.enemy.Balloom;
+import uet.oop.bomberman.entities.enemy.Oneal;
 import uet.oop.bomberman.graphics.Sprite;
 
 import java.io.BufferedReader;
@@ -17,6 +19,8 @@ public class Map {
     public static int height; // theo o
 
     List<Entity> map = new ArrayList<>();
+
+    public static List<List<Integer>> getBlocks = new ArrayList<List<Integer>>();
 
     public static int getWidth() {
         return width;
@@ -35,40 +39,6 @@ public class Map {
     public void setObjects(List<Entity> objects) {
         this.objects = objects;
     }
-
-
-    public boolean checkUp(Entity entity) {
-//        if (getEntity((entity.getX() + Sprite.DEFAULT_SIZE) / 32, (entity.getY() - entity.getVelocity()) / 32).goThrough) {
-        if (getEntity((entity.getX()) / 32, (entity.getY() - entity.getVelocity()) / 32).goThrough) {
-            return true;
-        }
-        return false;
-    }
-
-    public boolean checkDown(Entity entity) {
-//        if (getEntity((entity.getX() + Sprite.DEFAULT_SIZE) / 32, (entity.getY() + entity.getVelocity() + Sprite.SCALED_SIZE) / 32).goThrough) {
-        if (getEntity((entity.getX() + Sprite.DEFAULT_SIZE) / 32, (entity.getY()  + 2 * Sprite.DEFAULT_SIZE) / 32).goThrough) {
-            return true;
-        }
-        return false;
-    }
-
-    public boolean checkLeft(Entity entity) {
-        //if (getEntity((entity.getX() - entity.getVelocity()) / 32, entity.getY() / 32).goThrough) {
-        if (getEntity((entity.getX() - entity.getVelocity()) / 32, entity.getY() / 32).goThrough) {
-            return true;
-        }
-        return false;
-    }
-
-    public boolean checkRight(Entity entity) {
-        //if (getEntity((entity.getX() + entity.getVelocity() + Sprite.SCALED_SIZE) / 32, (entity.getY() + Sprite.DEFAULT_SIZE) / 32).goThrough) {
-        if (getEntity((entity.getX()  + 2 * Sprite.DEFAULT_SIZE) / 32, (entity.getY() + Sprite.DEFAULT_SIZE) / 32).goThrough) {
-            return true;
-        }
-        return false;
-    }
-
 
     public void createMap(List<Entity> stillObjects) throws IOException {
 
@@ -96,6 +66,10 @@ public class Map {
             String ss = br.readLine();
         }
 
+        //create getBlocks list;
+        getBlocks.add(new ArrayList<Integer>());
+        getBlocks.add(new ArrayList<Integer>());
+
         for (int i = 0; i < col; i++) {
             for (int j = 0; j < row; j++) {
                 Entity object;
@@ -103,35 +77,43 @@ public class Map {
                 switch (cMap[j][i]) {
                     case '#':
                         object = new Wall(i, j, Sprite.wall.getFxImage());
+                        getBlocks.get(0).add(i);
+                        getBlocks.get(1).add(j);
                         break;
                     case '*':
                         object = new Brick(i, j, Sprite.brick.getFxImage());
+                        getBlocks.get(0).add(i);
+                        getBlocks.get(1).add(j);
                         break;
                     case 'x':
-                        object = new Portal(i, j, Sprite.portal.getFxImage());
+                        object = new Grass(i, j, Sprite.grass.getFxImage());
+                        objectName = new Portal(i, j, Sprite.portal.getFxImage());
+                        getBlocks.get(0).add(i);
+                        getBlocks.get(1).add(j);
                         break;
-//                    case 'p':
-//                       object = new Bomber(i, j, Sprite.bomber)
-//                        break;
+                    case 'p':
+                        object = new Grass(i, j, Sprite.grass.getFxImage());
+                        objectName = new Bomber(i, j, Sprite.player_down.getFxImage());
+                        break;
                     case '1':
                         object = new Grass(i, j, Sprite.grass.getFxImage());
                         objectName = new Balloom(i, j, Sprite.balloom_left1.getFxImage());
                         break;
-//                    case '2':
-//                        object = new Oneal();
-//                        break;
+                    case '2':
+                        object = new Grass(i, j, Sprite.grass.getFxImage());
+                        objectName = new Oneal(i, j, Sprite.oneal_left1.getFxImage());
+                        break;
 //                    case 'b':
 //                        break;
 //                    case 'f':
 //                        break;
 //                    case 's':
 //                        break;
-                    case ' ':
-                        object = new Grass(i, j, Sprite.grass.getFxImage());
-                        break;
+//                    case ' ':
+//                        object = new Grass(i, j, Sprite.grass.getFxImage());
+//                        break;
                     default:
                         object = new Grass(i, j, Sprite.grass.getFxImage());
-//                        throw new IllegalStateException("Unexpected value: " + cMap[j][i]);
                 }
                 stillObjects.add(object);
                 if (objectName != null) {
@@ -154,25 +136,27 @@ public class Map {
     int fromPosToIndex(int x, int y) {
         return height * x + y;
     }
+
     public void printMap(List<Entity> stillObjects, GraphicsContext gc) {
-        for(int i = 0; i < stillObjects.size(); i++) {
+        for (int i = 0; i < stillObjects.size(); i++) {
             stillObjects.get(i).render(gc);
         }
     }
+
     public void updateAfterExplode(int x, int y, List<Entity> stillObjects) {
-        if(getEntity(x / 32, y / 32 - 1) instanceof Brick) {
+        if (getEntity(x / 32, y / 32 - 1) instanceof Brick) {
             Grass grass = new Grass(x / 32, y / 32 - 1, Sprite.grass.getFxImage());
             changeEntity(x / 32, y / 32 - 1, grass, stillObjects);
         }
-        if(getEntity(x / 32, y / 32 + 1) instanceof Brick) {
+        if (getEntity(x / 32, y / 32 + 1) instanceof Brick) {
             Grass grass = new Grass(x / 32, y / 32 + 1, Sprite.grass.getFxImage());
             changeEntity(x / 32, y / 32 + 1, grass, stillObjects);
         }
-        if(getEntity(x / 32 - 1, y / 32) instanceof Brick) {
+        if (getEntity(x / 32 - 1, y / 32) instanceof Brick) {
             Grass grass = new Grass(x / 32 - 1, y / 32, Sprite.grass.getFxImage());
             changeEntity(x / 32 - 1, y / 32, grass, stillObjects);
         }
-        if(getEntity(x / 32 + 1, y / 32) instanceof Brick) {
+        if (getEntity(x / 32 + 1, y / 32) instanceof Brick) {
             Grass grass = new Grass(x / 32 + 1, y / 32, Sprite.grass.getFxImage());
             changeEntity(x / 32 + 1, y / 32, grass, stillObjects);
         }

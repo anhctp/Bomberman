@@ -1,25 +1,22 @@
 package uet.oop.bomberman;
 
 //import com.sun.webkit.dom.EntityImpl;
+
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
-import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
-import uet.oop.bomberman.entities.*;
+import uet.oop.bomberman.AI.AStar;
+import uet.oop.bomberman.entities.Bomber;
+import uet.oop.bomberman.entities.Entity;
 import uet.oop.bomberman.graphics.Sprite;
 
-import java.awt.event.MouseEvent;
-import java.io.*;
-import java.security.Key;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
 public class BombermanGame extends Application {
 
@@ -51,16 +48,19 @@ public class BombermanGame extends Application {
         stage.setScene(scene);
         stage.show();
 
+        addEntities();
         Bomber bomberman = new Bomber(1, 1, Sprite.player_right.getFxImage());
 
-        scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
-            @Override
-            public void handle(KeyEvent keyEvent) {
-                bomberman.handleEvent(keyEvent, m, entities, stillObjects, gc);
+        for (Entity e : m.getObjects()) {
+            if (e instanceof Bomber) {
+                bomberman = (Bomber) e;
+                break;
             }
-        });
+        }
+
+        Bomber finalBomberman = bomberman;
+        scene.setOnKeyPressed(keyEvent -> finalBomberman.handleEvent(keyEvent, m, entities, stillObjects, gc));
         entities.add(bomberman);
-        addBalloom();
 
         AnimationTimer timer = new AnimationTimer() {
             @Override
@@ -72,11 +72,9 @@ public class BombermanGame extends Application {
         timer.start();
     }
 
-    public void addBalloom() {
-        for(Entity entity : m.getObjects()) {
-            if (entity instanceof Balloom) {
-                entities.add(entity);
-            }
+    public void addEntities() {
+        for (Entity entity : m.getObjects()) {
+            entities.add(entity);
         }
     }
 
