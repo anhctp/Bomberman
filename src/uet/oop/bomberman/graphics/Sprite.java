@@ -205,13 +205,6 @@ public class Sprite {
 		load();
 	}
 
-	public int get_realWidth() {
-		return _realWidth;
-	}
-
-	public int get_realHeight() {
-		return _realHeight;
-	}
 
 	public Sprite(int size, int color) {
 		SIZE = size;
