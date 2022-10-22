@@ -40,7 +40,7 @@ public class Bomb extends Entity {
     public Bomb(int x, int y, Image img, int flameLv) {
         super(x, y, img);
         goThrough = false;
-        beforeExplodeTime = 120;
+        beforeExplodeTime = 100;
         explodeTime = 120;
         isAcitve = false;
         isExplode = false;

@@ -14,10 +14,11 @@ import static uet.oop.bomberman.BombermanGame.entities;
 import static uet.oop.bomberman.BombermanGame.m;
 
 public class Enemy extends Entity {
+    public static int countEnemy = 0;
     protected STATE state = null;
     protected int num = 1;
     protected int time = 10;
-    protected int timeDead = 100;
+    protected int timeDead = 150;
     protected boolean appear = false;
     protected boolean isDead = false;
 
@@ -58,6 +59,7 @@ public class Enemy extends Entity {
 
     public Enemy(int xUnit, int yUnit, Image img) {
         super(xUnit, yUnit, img);
+        countEnemy++;
     }
 
     public void moveUp() {
@@ -162,6 +164,7 @@ public class Enemy extends Entity {
     }
 
     public void dead(Enemy enemy) {
+        countEnemy--;
         Grass grass = new Grass(enemy.x, enemy.y, Sprite.grass.getFxImage());
         int i = entities.indexOf(enemy);
         entities.set(i, grass);

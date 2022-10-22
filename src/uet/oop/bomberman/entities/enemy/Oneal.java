@@ -2,13 +2,15 @@ package uet.oop.bomberman.entities.enemy;
 
 import javafx.scene.image.Image;
 import uet.oop.bomberman.AI.AStar;
-import uet.oop.bomberman.entities.Bomber;
-import uet.oop.bomberman.entities.Entity;
+import uet.oop.bomberman.entities.*;
 import uet.oop.bomberman.graphics.Sprite;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import static uet.oop.bomberman.BombermanGame.stillObjects;
 import static uet.oop.bomberman.Map.width;
 import static uet.oop.bomberman.Map.height;
-import static uet.oop.bomberman.Map.getBlocks;
 import static uet.oop.bomberman.BombermanGame.entities;
 
 public class Oneal extends Enemy {
@@ -25,6 +27,7 @@ public class Oneal extends Enemy {
 
     public Oneal(int xUnit, int yUnit, Image img) {
         super(xUnit, yUnit, img);
+        velocity = 4;
     }
 
     public void applyAStar() {
@@ -35,14 +38,29 @@ public class Oneal extends Enemy {
                     bomberman = (Bomber) e;
                 }
             }
-            AStar aStarInit = new AStar(width, height, this.x / 32, this.y / 32, bomberman.getX() / 32, bomberman.getY() / 32, getBlocks);
+
+            List<List<Integer>> blocks = new ArrayList<>();
+            blocks.add(new ArrayList<Integer>());
+            blocks.add(new ArrayList<Integer>());
+            for (Entity entity : entities) {
+                if ((entity instanceof Bomb) || (entity instanceof Flame)) {
+                    blocks.get(0).add(entity.getX() / 32);
+                    blocks.get(1).add(entity.getY() / 32);
+                }
+            }
+            for (Entity entity : stillObjects) {
+                if ((entity instanceof Wall) || (entity instanceof Brick)) {
+                    blocks.get(0).add(entity.getX() / 32);
+                    blocks.get(1).add(entity.getY() / 32);
+                }
+            }
+            AStar aStarInit = new AStar(width, height, this.x / 32, this.y / 32, bomberman.getX() / 32, bomberman.getY() / 32, blocks);
             aStar = aStarInit;
             aStar.process();
             if (aStar.getPath() != null) {
-
-                if (aStar.getPath().size() > 2) {
-                    int nextX = aStar.getPath().get(0).get(aStar.getPath().get(0).size() - 2);
-                    int nextY = aStar.getPath().get(1).get(aStar.getPath().get(1).size() - 2);
+                if (aStar.getPath().get(0).size() > 2) {
+                    int nextX = aStar.getPath().get(0).get(aStar.getPath().get(0).size() - 1);
+                    int nextY = aStar.getPath().get(1).get(aStar.getPath().get(1).size() - 1);
                     if (this.y / 32 > nextY) {
                         this.state = STATE.UP;
                     }
@@ -72,7 +90,6 @@ public class Oneal extends Enemy {
             }
         }
     }
-
 
     @Override
     public void setImg() {

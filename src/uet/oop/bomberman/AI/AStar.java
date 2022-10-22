@@ -82,6 +82,7 @@ public class AStar {
     public void process() {
         //We add the star location to open list
         openCells.add(grid[startI][startJ]);
+
         Cell current = null;
 
         while (true) {
@@ -94,7 +95,7 @@ public class AStar {
             closedCells[current.i][current.j] = true;
 
             if (current.equals(grid[endI][endJ])) {
-                return;
+                break;
             }
 
             Cell t = null;
@@ -124,12 +125,10 @@ public class AStar {
         path.add(new ArrayList<Integer>());
         if (closedCells[endI][endJ]) {
             Cell current = grid[endI][endJ];
-            path.get(0).add(endI);
-            path.get(1).add(endJ);
             while (current.parent != null) {
-                current = current.parent;
                 path.get(0).add(current.i);
                 path.get(1).add(current.j);
+                current = current.parent;
             }
         } else path = null;
         return path;

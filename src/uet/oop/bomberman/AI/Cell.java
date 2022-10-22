@@ -9,7 +9,6 @@ public class Cell {
     public int heuristicCost;
     //final cost
     public int finalCost;
-
     //    G + H with
     //    G(n) the cost of the path from the star node to n
     //    H(n) the heuristic that estimates the cost of the cheapest path from n to the goal

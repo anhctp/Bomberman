@@ -20,8 +20,6 @@ public class Level {
     private List<Entity> objects = new ArrayList<>();
 
     public void initMapLevel() throws IOException {
-        entities.clear();
-        stillObjects.clear();
         FileInputStream file = new FileInputStream("res/levels/Level" + nextLevel +".txt");
         Scanner scanner = new Scanner(file);
         int level = scanner.nextInt();
@@ -44,10 +42,6 @@ public class Level {
             String ss = br.readLine();
         }
 
-        //create getBlocks list;
-        getBlocks.add(new ArrayList<Integer>());
-        getBlocks.add(new ArrayList<Integer>());
-
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {
                 Entity object;
@@ -55,19 +49,13 @@ public class Level {
                 switch (cMap[j][i]) {
                     case '#':
                         object = new Wall(i, j, Sprite.wall.getFxImage());
-                        getBlocks.get(0).add(i);
-                        getBlocks.get(1).add(j);
                         break;
                     case '*':
                         object = new Brick(i, j, Sprite.brick.getFxImage());
-                        getBlocks.get(0).add(i);
-                        getBlocks.get(1).add(j);
                         break;
                     case 'x':
                         object = new Grass(i, j, Sprite.grass.getFxImage());
                         objectName = new Portal(i, j, Sprite.portal.getFxImage());
-                        getBlocks.get(0).add(i);
-                        getBlocks.get(1).add(j);
                         break;
                     case 'p':
                         object = new Grass(i, j, Sprite.grass.getFxImage());
