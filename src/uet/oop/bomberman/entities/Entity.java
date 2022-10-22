@@ -13,9 +13,31 @@ import java.awt.event.KeyListener;
 
 public abstract class Entity {
     //Tọa độ X tính từ góc trái trên trong Canvas
+    protected int left;
+    protected int right;
+    protected int top;
+    protected int bottom;
+
     protected int velocity = 0;
     public boolean goThrough = true;
     protected int x;
+
+    public int getLeft() {
+        return left;
+    }
+
+    public int getRight() {
+        return right;
+    }
+
+    public int getTop() {
+        return top;
+    }
+
+    public int getBottom() {
+        return bottom;
+    }
+
     protected boolean appear = true;
 
     //Tọa độ Y tính từ góc trái trên trong Canvas

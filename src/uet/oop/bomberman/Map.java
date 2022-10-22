@@ -13,10 +13,10 @@ import java.util.List;
 import java.util.Scanner;
 
 public class Map {
-    public static int width; // theo o
-    public static int height; // theo o
+    private static int width; // theo o
+    private static int height; // theo o
 
-    List<Entity> map = new ArrayList<>();
+    public static List<Entity> map = new ArrayList<>();
 
     public static int getWidth() {
         return width;
@@ -26,6 +26,7 @@ public class Map {
         return height;
     }
 
+    public static List<Entity> items = new ArrayList<>();
     private List<Entity> objects = new ArrayList<>();
 
     public List<Entity> getObjects() {
@@ -36,6 +37,13 @@ public class Map {
         this.objects = objects;
     }
 
+    public List<Entity> getMap() {
+        return map;
+    }
+
+    public void setMap(List<Entity> map) {
+        this.map = map;
+    }
 
     public boolean checkUp(Entity entity) {
 //        if (getEntity((entity.getX() + Sprite.DEFAULT_SIZE) / 32, (entity.getY() - entity.getVelocity()) / 32).goThrough) {
@@ -72,7 +80,8 @@ public class Map {
 
     public void createMap(List<Entity> stillObjects) throws IOException {
 
-        FileInputStream file = new FileInputStream("res\\levels\\Level2.txt");
+//        FileInputStream file = new FileInputStream("res\\levels\\Level2.txt");
+        FileInputStream file = new FileInputStream("/Users/admin/Downloads/Work/OOP/Bomberman/res/levels/Level1.txt");
         Scanner scanner = new Scanner(file);
         int level = scanner.nextInt();
         int row = scanner.nextInt();
@@ -81,8 +90,8 @@ public class Map {
         width = col;
         height = row;
 
-        FileReader fr = new FileReader("res\\levels\\Level2.txt");   //Creation of File Reader object
-//        FileReader fr = new FileReader("/Users/admin/Downloads/Work/OOP/Bomberman/res/levels/Level1.txt");   //Creation of File Reader object
+//        FileReader fr = new FileReader("res\\levels\\Level2.txt");   //Creation of File Reader object
+        FileReader fr = new FileReader("/Users/admin/Downloads/Work/OOP/Bomberman/res/levels/Level1.txt");   //Creation of File Reader object
         BufferedReader br = new BufferedReader(fr);  //Creation of BufferedReader object
         String s = br.readLine();
         char[][] cMap = new char[row][col];
@@ -99,6 +108,7 @@ public class Map {
         for (int i = 0; i < col; i++) {
             for (int j = 0; j < row; j++) {
                 Entity object;
+                Entity item = null;
                 Entity objectName = null;
                 switch (cMap[j][i]) {
                     case '#':
@@ -120,12 +130,19 @@ public class Map {
 //                    case '2':
 //                        object = new Oneal();
 //                        break;
-//                    case 'b':
-//                        break;
-//                    case 'f':
-//                        break;
-//                    case 's':
-//                        break;
+                    case 'b':
+                        item = new BombItem(i, j, Sprite.powerup_bombs.getFxImage());
+                        object = new Brick(i, j, Sprite.brick.getFxImage(), true, item);
+                        break;
+                    case 'f':
+                        item = new FlameItem(i, j, Sprite.powerup_flames.getFxImage());
+                        object = new Brick(i, j, Sprite.brick.getFxImage(), true, item);
+
+                        break;
+                    case 's':
+                        item = new SpeedItem(i, j, Sprite.powerup_speed.getFxImage());
+                        object = new Brick(i, j, Sprite.brick.getFxImage(), true, item);
+                        break;
                     case ' ':
                         object = new Grass(i, j, Sprite.grass.getFxImage());
                         break;
@@ -138,6 +155,7 @@ public class Map {
                     objects.add(objectName);
                 }
                 map.add(object);
+
             }
             String ss = br.readLine();
         }
@@ -147,34 +165,66 @@ public class Map {
         return map.get(fromPosToIndex(x, y));
     }
 
-    public void changeEntity(int x, int y, Entity entity, List<Entity> stillObjects) {
-        stillObjects.set(fromPosToIndex(x, y), entity);
+    public void changeEntity(int x, int y, Entity entity) {
+        map.set(fromPosToIndex(x, y), entity);
     }
 
-    int fromPosToIndex(int x, int y) {
+    public int fromPosToIndex(int x, int y) {
         return height * x + y;
     }
     public void printMap(List<Entity> stillObjects, GraphicsContext gc) {
-        for(int i = 0; i < stillObjects.size(); i++) {
-            stillObjects.get(i).render(gc);
+        for(int i = 0; i < map.size(); i++) {
+            map.get(i).render(gc);
         }
     }
     public void updateAfterExplode(int x, int y, List<Entity> stillObjects) {
         if(getEntity(x / 32, y / 32 - 1) instanceof Brick) {
             Grass grass = new Grass(x / 32, y / 32 - 1, Sprite.grass.getFxImage());
-            changeEntity(x / 32, y / 32 - 1, grass, stillObjects);
+            changeEntity(x / 32, y / 32 - 1, grass);
         }
         if(getEntity(x / 32, y / 32 + 1) instanceof Brick) {
             Grass grass = new Grass(x / 32, y / 32 + 1, Sprite.grass.getFxImage());
-            changeEntity(x / 32, y / 32 + 1, grass, stillObjects);
+            changeEntity(x / 32, y / 32 + 1, grass);
         }
         if(getEntity(x / 32 - 1, y / 32) instanceof Brick) {
             Grass grass = new Grass(x / 32 - 1, y / 32, Sprite.grass.getFxImage());
-            changeEntity(x / 32 - 1, y / 32, grass, stillObjects);
+            changeEntity(x / 32 - 1, y / 32, grass);
         }
         if(getEntity(x / 32 + 1, y / 32) instanceof Brick) {
             Grass grass = new Grass(x / 32 + 1, y / 32, Sprite.grass.getFxImage());
-            changeEntity(x / 32 + 1, y / 32, grass, stillObjects);
+            changeEntity(x / 32 + 1, y / 32, grass);
         }
+    }
+
+
+
+    public boolean checkCollision(Entity e1, Entity e2) {
+        int leftE1 = e1.getX();
+        int rightE1 = e1.getX() + 10;
+        int topE1 = e1.getY();
+        int bottomE1 = e1.getY() + 15;
+
+        int leftE2 = e2.getX();
+        int rightE2 = e2.getX() + 16;
+        int topE2 = e2.getY();
+        int bottomE2 = e2.getY() + 16;
+
+        if(bottomE1 < topE2 ) {
+            return false;
+        }
+
+        if(topE1 > bottomE2) {
+            return false;
+        }
+
+        if(rightE1 < leftE2 ) {
+            return false;
+        }
+
+        if( leftE1 > rightE2 ) {
+            return false;
+        }
+        return true;
+
     }
 }

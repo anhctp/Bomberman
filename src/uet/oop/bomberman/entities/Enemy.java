@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Random;
 
 import static uet.oop.bomberman.BombermanGame.entities;
+import static uet.oop.bomberman.BombermanGame.m;
 
 public class Enemy extends Entity {
     protected STATE state = null;
@@ -90,9 +91,11 @@ public class Enemy extends Entity {
     }
 
     public void dead(Enemy enemy) {
-        Enemy enemy1 = new Enemy(enemy.x, enemy.y, Sprite.grass.getFxImage());
+        Grass grass = new Grass(enemy.x, enemy.y, Sprite.grass.getFxImage());
         int i = entities.indexOf(enemy);
-        entities.set(i, enemy1);
+        entities.set(i, grass);
+        System.out.println(entities.get(i).getClass());
+//        m.getMap().set(i, grass);
     }
 
     @Override
