@@ -11,9 +11,13 @@ import uet.oop.bomberman.entities.*;
 import uet.oop.bomberman.graphics.Sprite;
 import uet.oop.bomberman.sound.Sound;
 
+import javax.swing.plaf.basic.BasicTreeUI;
+import java.awt.event.MouseEvent;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
+import java.util.concurrent.TimeUnit;
 
 import static uet.oop.bomberman.Map.map;
 import static uet.oop.bomberman.entities.enemy.Enemy.countEnemy;
@@ -25,12 +29,17 @@ public class BombermanGame extends Application {
     public static List<Entity> entities = new ArrayList<>();
     public static List<Entity> stillObjects = new ArrayList<>();
     public static Map m = new Map();
+    private List<Entity> stillObjects = new ArrayList<>();
+    KeyHandler keyHandler = new KeyHandler();
 
     private GraphicsContext gc;
     private Canvas canvas;
 
     static Sound sound = new Sound("res/Sound/music.wav");
 
+//    private long lastTime;
+//    private static final int FPS = 30;
+//    private static final long TIME_PER_FRAME = 1000000000 / FPS;
     @Override
     public void start(Stage stage) throws IOException {
         // Sound
@@ -80,7 +89,13 @@ public class BombermanGame extends Application {
             public void handle(long l) {
                 render();
                 update();
+//                try {
+//                    TimeUnit.NANOSECONDS.sleep(100);
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
             }
+
         };
         timer.start();
     }

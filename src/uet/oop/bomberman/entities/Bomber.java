@@ -3,6 +3,9 @@ package uet.oop.bomberman.entities;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
+import uet.oop.bomberman.BombermanGame;
+import uet.oop.bomberman.KeyHandler;
+import javafx.scene.input.KeyCode;
 import uet.oop.bomberman.KeyHandler;
 import uet.oop.bomberman.Map;
 import uet.oop.bomberman.entities.enemy.Enemy;
@@ -11,14 +14,21 @@ import uet.oop.bomberman.entities.items.FlameItem;
 import uet.oop.bomberman.entities.items.SpeedItem;
 import uet.oop.bomberman.graphics.Sprite;
 
+import javax.swing.plaf.basic.BasicTreeUI;
+import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
 
 import static uet.oop.bomberman.BombermanGame.*;
 
+import static uet.oop.bomberman.BombermanGame.m;
+import static uet.oop.bomberman.BombermanGame.entities;
+
 public class Bomber extends Entity {
     private static int STEP = 4;
     //    private int velocity = STEP / 8;
+    private static int STEP = 4;
+//    private int velocity = STEP / 8;
     private int maxBomb = 1; //
     protected int num = 1;
     public KeyHandler keyHandler;
@@ -53,6 +63,8 @@ public class Bomber extends Entity {
 
     @Override
     public void update() {
+        for (int i = 0; i < bombs.size(); i++) {
+            if (bombs.get(i).getIsExplode()) {
         //Load next level
         for (Entity e : entities) {
             if (e instanceof Portal) {
@@ -77,13 +89,14 @@ public class Bomber extends Entity {
             }
         }
 
-        if (dead(m)) {
-            if (deadTime == 0) {
+        if(dead(m)) {
+            if(deadTime == 0) {
                 appear = false;
             } else {
                 deadTime--;
             }
         }
+
     }
 
     public void moveUp(GraphicsContext gc) {
@@ -103,7 +116,7 @@ public class Bomber extends Entity {
         left = x;
         right = x + Sprite.player_up.get_realWidth() * 2;
         setImg();
-//        System.out.println(x + " " + y);
+        System.out.println(x + " " + y);
 
     }
 
@@ -124,7 +137,7 @@ public class Bomber extends Entity {
         left = x;
         right = x + Sprite.player_down.get_realWidth() * 2;
         setImg();
-//        System.out.println(x + " " + y);
+        System.out.println(x + " " + y);
 
     }
 
@@ -134,7 +147,7 @@ public class Bomber extends Entity {
         Entity under = m.getEntity((this.getX() - 1) / 32, (this.getY() + Sprite.player_left.get_realHeight() * 2 - STEP) / 32);
         int count = 0;
 
-        while (above.goThrough && under.goThrough && (count < STEP)) {
+        while(above.goThrough && under.goThrough && (count < STEP)) {
 //            state = State.LEFT;
             x--;
             count++;
@@ -147,14 +160,14 @@ public class Bomber extends Entity {
         left = x;
         right = x + Sprite.player_left.get_realWidth() * 2;
         setImg();
-//        System.out.println(x + " " + y);
+        System.out.println(x + " " + y);
     }
 
     public void moveRight() {
         Entity above = m.getEntity((this.getX() + Sprite.player_right.get_realWidth() * 2 + 1) / 32, this.getY() / 32);
         Entity under = m.getEntity((this.getX() + Sprite.player_right.get_realWidth() * 2 + 1) / 32, (this.getY() + Sprite.player_right.get_realHeight() * 2 - (STEP)) / 32);
         int count = 0;
-        while (above.goThrough && under.goThrough && (count < STEP)) {
+        while(above.goThrough && under.goThrough && (count < STEP)) {
 //            state = State.RIGHT;
             x++;
             count++;
@@ -167,7 +180,7 @@ public class Bomber extends Entity {
         left = x;
         right = x + Sprite.player_right.get_realWidth() * 2;
         setImg();
-//        System.out.println(x + " " + y);
+        System.out.println(x + " " + y);
 
     }
 
@@ -192,84 +205,108 @@ public class Bomber extends Entity {
         return false;
     }
 
-    public void handleEvent(Map m, List<Entity> entities, GraphicsContext gc) {
-        if (upPressed) {
-            moveUp(gc);
-            Entity grass1 = new Grass(this.getX() / 32, (this.getY()) / 32, Sprite.grass.getFxImage());
-            if (checkItem(m.getEntity(this.getX() / 32, this.getY() / 32), grass1)) {
-                m.changeEntity(this.getX() / 32, this.getY() / 32, grass1);
-            }
-        } else if (downPressed) {
-            moveDown(gc);
-            Entity grass2 = new Grass(this.getX() / 32, (this.getY() + Sprite.player_down.get_realHeight() * 2) / 32, Sprite.grass.getFxImage());
-            if (checkItem(m.getEntity(this.getX() / 32, (this.getY() + Sprite.player_down.get_realHeight() * 2) / 32), grass2)) {
-                m.changeEntity(this.getX() / 32, (this.getY() + Sprite.player_down.get_realHeight() * 2) / 32, grass2);
-            }
-        } else if (leftPressed) {
-            moveLeft();
-            Entity grass3 = new Grass(this.getX() / 32, (this.getY()) / 32, Sprite.grass.getFxImage());
-            if (checkItem(m.getEntity(this.getX() / 32, this.getY() / 32), grass3)) {
-                m.changeEntity(this.getX() / 32, this.getY() / 32, grass3);
-            }
-        } else if (rightPressed) {
-            moveRight();
-            Entity grass4 = new Grass((this.getX() + Sprite.player_right.get_realWidth() * 2) / 32, (this.getY()) / 32, Sprite.grass.getFxImage());
-            if (checkItem(m.getEntity((this.getX() + Sprite.player_right.get_realWidth() * 2) / 32, this.getY() / 32), grass4)) {
-                m.changeEntity((this.getX() + Sprite.player_right.get_realWidth() * 2) / 32, this.getY() / 32, grass4);
-            }
-        } else if (spacePressed) {
-            if (bombs.size() < maxBomb) {
-                Bomb bomb = new Bomb(x / 32, (y + 16) / 32, Sprite.bomb.getFxImage(), flameLvOfbbm); // 16 = height of bomber / 2
-                bomb.isPlaySoundExplosion = false;
-                bomb.setBomb(entities, bomb);
-                bombs.add(bomb);
-            }
+    public boolean checkItem(Entity entity, Entity grass) {
+        if(entity instanceof SpeedItem) {
+            STEP += 4;
+            return true;
         }
+        if(entity instanceof BombItem) {
+            maxBomb += 1;
+            return true;
+        }
+        if(entity instanceof FlameItem) {
+            flameLvOfbbm++;
+            for (Bomb b : bombs) {
+                if(b.isAcitve() == false) {
+                    b.setFlameLv(flameLvOfbbm);
+                }
+            }
+            return true;
+        }
+        return false;
+    }
+        public void handleEvent(Map m, List<Entity> entities, GraphicsContext gc) {
+            if (upPressed) {
+                moveUp(gc);
+                Entity grass1 = new Grass(this.getX() / 32, (this.getY()) / 32, Sprite.grass.getFxImage());
+                if (checkItem(m.getEntity(this.getX() / 32, this.getY() / 32), grass1)) {
+                    m.changeEntity(this.getX() / 32, this.getY() / 32, grass1);
+                }
+            }
+            else if (downPressed) {
+                moveDown(gc);
+                Entity grass2 = new Grass(this.getX() / 32, (this.getY() + Sprite.player_down.get_realHeight() * 2) / 32, Sprite.grass.getFxImage());
+                if (checkItem(m.getEntity(this.getX() / 32, (this.getY() + Sprite.player_down.get_realHeight() * 2) / 32), grass2)) {
+                    m.changeEntity(this.getX() / 32, (this.getY() + Sprite.player_down.get_realHeight() * 2) / 32, grass2);
+                }
+            }
+            else if (leftPressed) {
+                moveLeft();
+                Entity grass3 = new Grass(this.getX() / 32, (this.getY()) / 32, Sprite.grass.getFxImage());
+                if (checkItem(m.getEntity(this.getX() / 32, this.getY() / 32), grass3)) {
+                    m.changeEntity(this.getX() / 32, this.getY() / 32, grass3);
+                }
+            }
+            else if (rightPressed) {
+                moveRight();
+                Entity grass4 = new Grass((this.getX() + Sprite.player_right.get_realWidth() * 2) / 32, (this.getY()) / 32, Sprite.grass.getFxImage());
+                if (checkItem(m.getEntity((this.getX() + Sprite.player_right.get_realWidth() * 2) / 32, this.getY() / 32), grass4)) {
+                    m.changeEntity((this.getX() + Sprite.player_right.get_realWidth() * 2) / 32, this.getY() / 32, grass4);
+                }
+            }
+            else if (spacePressed) {
+                if (bombs.size() < maxBomb) {
+                    Bomb bomb = new Bomb(x / 32, (y + 16) / 32, Sprite.bomb.getFxImage(), flameLvOfbbm); // 16 = height of bomber / 2
+                    bomb.setBomb(entities, bomb);
+                    bombs.add(bomb);
+                }
+            }
 
     }
 
     public void handleKeyPressed(javafx.scene.input.KeyEvent e) {
         KeyCode code = e.getCode();
-        if (code == KeyCode.UP) {
+        if(code == KeyCode.UP) {
             upPressed = true;
         }
-        if (code == KeyCode.DOWN) {
+        if(code == KeyCode.DOWN) {
             downPressed = true;
         }
-        if (code == KeyCode.LEFT) {
+        if(code == KeyCode.LEFT) {
             leftPressed = true;
         }
-        if (code == KeyCode.RIGHT) {
+        if(code == KeyCode.RIGHT) {
             rightPressed = true;
         }
-        if (code == KeyCode.SPACE) {
+        if(code == KeyCode.SPACE) {
             spacePressed = true;
         }
     }
 
     public void handleKeyReleased(javafx.scene.input.KeyEvent e) {
         KeyCode code = e.getCode();
-        if (code == KeyCode.UP) {
+        if(code == KeyCode.UP) {
             upPressed = false;
         }
-        if (code == KeyCode.DOWN) {
+        if(code == KeyCode.DOWN) {
             downPressed = false;
         }
-        if (code == KeyCode.LEFT) {
+        if(code == KeyCode.LEFT) {
             leftPressed = false;
         }
-        if (code == KeyCode.RIGHT) {
+        if(code == KeyCode.RIGHT) {
             rightPressed = false;
         }
-        if (code == KeyCode.SPACE) {
+        if(code == KeyCode.SPACE) {
             spacePressed = false;
         }
     }
-
     public boolean dead(Map m) {
         for (int i = 0; i < entities.size(); i++) {
             if (m.checkCollision(entities.get(i), this)) {
                 if (entities.get(i) instanceof Enemy) {
+                    System.out.println(entities.get(i).getClass());
+                    System.out.println("dead");
                     dead = true;
                     setImg();
                 }
@@ -284,7 +321,7 @@ public class Bomber extends Entity {
                 for (int k = 0; k < m.getObjects().size(); k++) {
                     if (m.getObjects().get(k) instanceof Enemy) {
                         if (m.checkCollision(bombs.get(i).flames.get(j), m.getObjects().get(k))) {
-                            ((Enemy) m.getObjects().get(k)).setState(Enemy.STATE.DEAD);
+                            ((Enemy) m.getObjects().get(k)).state = Enemy.STATE.DEAD;
                         }
                     }
                 }
@@ -299,50 +336,49 @@ public class Bomber extends Entity {
         int top = e.getY();
         int bottom = e.getY() + Sprite.SCALED_SIZE;
 
-        if (this.getBottom() < top) {
+        if(this.getBottom() < top) {
             return false;
         }
 
-        if (this.getTop() > bottom) {
+        if(this.getTop() > bottom) {
             return false;
         }
 
-        if (this.getRight() < left) {
+        if(this.getRight() < left ) {
             return false;
         }
 
-        if (this.getLeft() > right) {
+        if( this.getLeft() > right ) {
             return false;
         }
         return true;
     }
-
     public void setImg() {
-        if (dead) {
+        if(dead) {
             this.img = Sprite.movingSprite(Sprite.player_dead1, Sprite.player_dead2, Sprite.player_dead3, num, 5).getFxImage();
         } else {
-            if (upPressed) {
+            if(upPressed) {
                 num++;
                 if (num > 20) {
                     num = 1;
                 }
                 this.img = Sprite.movingSprite(Sprite.player_up, Sprite.player_up_1, Sprite.player_up_2, num, 5).getFxImage();
             }
-            if (downPressed) {
+            if(downPressed) {
                 num++;
                 if (num > 20) {
                     num = 1;
                 }
                 this.img = Sprite.movingSprite(Sprite.player_down, Sprite.player_down_1, Sprite.player_down_2, num, 5).getFxImage();
             }
-            if (leftPressed) {
+            if(leftPressed) {
                 num++;
                 if (num > 20) {
                     num = 1;
                 }
                 this.img = Sprite.movingSprite(Sprite.player_left, Sprite.player_left_1, Sprite.player_left_2, num, 5).getFxImage();
             }
-            if (rightPressed) {
+            if(rightPressed) {
                 num++;
                 if (num > 20) {
                     num = 1;
@@ -350,5 +386,7 @@ public class Bomber extends Entity {
                 this.img = Sprite.movingSprite(Sprite.player_right, Sprite.player_right_1, Sprite.player_right_2, num, 5).getFxImage();
             }
         }
+
+
     }
 }

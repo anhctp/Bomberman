@@ -13,12 +13,21 @@ import static uet.oop.bomberman.BombermanGame.entities;
 import static uet.oop.bomberman.BombermanGame.stillObjects;
 
 public class Map {
-    public static int width; // theo o
-    public static int height; // theo o
+    private static int width; // theo o
+    private static int height; // theo o
 
-    public static List<Entity> map = new ArrayList<>();
+    List<Entity> map = new ArrayList<>();
+
+    public static int getWidth() {
+        return width;
+    }
 
     public static int nextLevel = 1;
+    public static int getHeight() {
+        return height;
+    }
+
+    public static List<Entity> items = new ArrayList<>();
     private List<Entity> objects = new ArrayList<>();
 
     public void setObjects(List<Entity> objects) {
