@@ -101,15 +101,15 @@ public class Oneal extends Enemy {
                 }
                 this.img = Sprite.movingSprite(Sprite.oneal_left1, Sprite.oneal_left2, Sprite.oneal_left3, num, 4).getFxImage();
                 break;
-            case RIGHT:
+            case DEAD:
+                this.img = Sprite.oneal_dead.getFxImage();
+                break;
+            default:
                 num++;
                 if (num > 3) {
                     num = 1;
                 }
                 this.img = Sprite.movingSprite(Sprite.oneal_right1, Sprite.oneal_right2, Sprite.oneal_right3, num, 4).getFxImage();
-                break;
-            case DEAD:
-                this.img = Sprite.oneal_dead.getFxImage();
                 break;
         }
     }

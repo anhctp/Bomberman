@@ -81,7 +81,11 @@ public class AStar {
 
     public void process() {
         //We add the star location to open list
-        openCells.add(grid[startI][startJ]);
+        try {
+            openCells.add(grid[startI][startJ]);
+        } catch (NullPointerException e) {
+            System.out.println("null");
+        }
 
         Cell current = null;
 

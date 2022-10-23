@@ -53,7 +53,8 @@ public class Bomber extends Entity {
 
     @Override
     public void update() {
-        for (Entity e : m.getObjects()) {
+        //Load next level
+        for (Entity e : entities) {
             if (e instanceof Portal) {
                 if (m.checkCollision(this, e)) {
                     m.createMap();
