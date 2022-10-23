@@ -3,6 +3,9 @@ package uet.oop.bomberman.level;
 import uet.oop.bomberman.entities.*;
 import uet.oop.bomberman.entities.enemy.Balloom;
 import uet.oop.bomberman.entities.enemy.Oneal;
+import uet.oop.bomberman.entities.items.BombItem;
+import uet.oop.bomberman.entities.items.FlameItem;
+import uet.oop.bomberman.entities.items.SpeedItem;
 import uet.oop.bomberman.graphics.Sprite;
 
 import java.io.BufferedReader;
@@ -45,6 +48,7 @@ public class Level {
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {
                 Entity object;
+                Entity item = null;
                 Entity objectName = null;
                 switch (cMap[j][i]) {
                     case '#':
@@ -69,12 +73,19 @@ public class Level {
                         object = new Grass(i, j, Sprite.grass.getFxImage());
                         objectName = new Oneal(i, j, Sprite.oneal_left1.getFxImage());
                         break;
-//                    case 'b':
-//                        break;
-//                    case 'f':
-//                        break;
-//                    case 's':
-//                        break;
+                    case 'b':
+                        item = new BombItem(i, j, Sprite.powerup_bombs.getFxImage());
+                        object = new Brick(i, j, Sprite.brick.getFxImage(), true, item);
+                        break;
+                    case 'f':
+                        item = new FlameItem(i, j, Sprite.powerup_flames.getFxImage());
+                        object = new Brick(i, j, Sprite.brick.getFxImage(), true, item);
+
+                        break;
+                    case 's':
+                        item = new SpeedItem(i, j, Sprite.powerup_speed.getFxImage());
+                        object = new Brick(i, j, Sprite.brick.getFxImage(), true, item);
+                        break;
                     default:
                         object = new Grass(i, j, Sprite.grass.getFxImage());
                 }

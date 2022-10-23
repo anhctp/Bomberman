@@ -5,6 +5,7 @@ import uet.oop.bomberman.Map;
 import uet.oop.bomberman.graphics.Sprite;
 
 import static uet.oop.bomberman.BombermanGame.m;
+import static uet.oop.bomberman.BombermanGame.soundEffect;
 
 public class Balloom extends Enemy {
 
@@ -35,14 +36,18 @@ public class Balloom extends Enemy {
                 break;
         }
     }
+
     @Override
     public void update() {
         if (isDead) {
+            if (!isPlaySoundDead) {
+                soundEffect("res/Sound/kill.wav");
+                isPlaySoundDead = true;
+            }
             if (timeDead == 0) {
                 dead(this);
                 appear = false;
-            }
-            else timeDead--;
+            } else timeDead--;
         }
         countDown();
         if (appear) {

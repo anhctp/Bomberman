@@ -220,6 +220,7 @@ public class Bomber extends Entity {
         } else if (spacePressed) {
             if (bombs.size() < maxBomb) {
                 Bomb bomb = new Bomb(x / 32, (y + 16) / 32, Sprite.bomb.getFxImage(), flameLvOfbbm); // 16 = height of bomber / 2
+                bomb.isPlaySoundExplosion = false;
                 bomb.setBomb(entities, bomb);
                 bombs.add(bomb);
             }

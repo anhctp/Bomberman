@@ -9,6 +9,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.stage.Stage;
 import uet.oop.bomberman.entities.*;
 import uet.oop.bomberman.graphics.Sprite;
+import uet.oop.bomberman.sound.Sound;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -28,8 +29,13 @@ public class BombermanGame extends Application {
     private GraphicsContext gc;
     private Canvas canvas;
 
+    static Sound sound = new Sound("res/Sound/music.wav");
+
     @Override
     public void start(Stage stage) throws IOException {
+        // Sound
+        sound.play();
+        sound.loop();
         // Tao Canvas
         m.createMap();
         canvas = new Canvas(Sprite.SCALED_SIZE * m.width, Sprite.SCALED_SIZE * m.height);
@@ -101,5 +107,10 @@ public class BombermanGame extends Application {
         map.forEach(g -> g.render(gc));
         //stillObjects.forEach(g -> g.render(gc));
         entities.forEach(g -> g.render(gc));
+    }
+
+    public static void soundEffect(String s) {
+        sound = new Sound(s);
+        sound.play();
     }
 }

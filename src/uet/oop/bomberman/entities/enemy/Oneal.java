@@ -8,14 +8,15 @@ import uet.oop.bomberman.graphics.Sprite;
 import java.util.ArrayList;
 import java.util.List;
 
-import static uet.oop.bomberman.BombermanGame.stillObjects;
+import static uet.oop.bomberman.BombermanGame.*;
 import static uet.oop.bomberman.Map.width;
 import static uet.oop.bomberman.Map.height;
-import static uet.oop.bomberman.BombermanGame.entities;
 
 public class Oneal extends Enemy {
 
     private AStar aStar;
+
+    private int countToChangeVelocity = 150;
 
     public AStar getAStar() {
         return aStar;
@@ -114,14 +115,38 @@ public class Oneal extends Enemy {
         }
     }
 
+    private int ramdomVelocity() {
+        int num = (int) (Math.random() * 4 + 1);
+        switch (num) {
+            case 1:
+                return 1;
+            case 2:
+                return 2;
+            case 3:
+                return 4;
+            default:
+                return 8;
+        }
+    }
+
     @Override
     public void update() {
         applyAStar();
         if (isDead) {
+            if (!isPlaySoundDead) {
+                soundEffect("res/Sound/kill.wav");
+                isPlaySoundDead = true;
+            }
             if (timeDead == 0) {
                 dead(this);
                 appear = false;
             } else timeDead--;
+        }
+        if (countToChangeVelocity == 0) {
+            velocity = ramdomVelocity();
+            countToChangeVelocity = 150;
+        } else {
+            countToChangeVelocity--;
         }
         countDown();
         if (appear) {

@@ -10,8 +10,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
-import static uet.oop.bomberman.BombermanGame.entities;
-import static uet.oop.bomberman.BombermanGame.m;
+import static uet.oop.bomberman.BombermanGame.*;
 
 public class Enemy extends Entity {
     public static int countEnemy = 0;
@@ -21,6 +20,7 @@ public class Enemy extends Entity {
     protected int timeDead = 150;
     protected boolean appear = false;
     protected boolean isDead = false;
+    protected boolean isPlaySoundDead = false;
 
 
     public enum STATE {
