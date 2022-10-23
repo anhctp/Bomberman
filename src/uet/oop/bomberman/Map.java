@@ -2,6 +2,8 @@ package uet.oop.bomberman;
 
 import javafx.scene.canvas.GraphicsContext;
 import uet.oop.bomberman.entities.*;
+import uet.oop.bomberman.entities.enemy.Balloom;
+import uet.oop.bomberman.entities.enemy.Oneal;
 import uet.oop.bomberman.graphics.Sprite;
 import uet.oop.bomberman.level.Level;
 
@@ -12,10 +14,16 @@ import java.util.List;
 import static uet.oop.bomberman.BombermanGame.entities;
 import static uet.oop.bomberman.BombermanGame.stillObjects;
 
-public class Map {
-    private static int width; // theo o
-    private static int height; // theo o
+import static uet.oop.bomberman.BombermanGame.stillObjects;
 
+public class Map {
+    public static int width; // theo o
+    public static int height; // theo o
+
+    public static List<Entity> map = new ArrayList<>();
+    public static List<Entity> bombs = new ArrayList<>();
+    public static List<List<Integer>> getBlocks = new ArrayList<List<Integer>>();
+    public static int nextLevel = 1;
     List<Entity> map = new ArrayList<>();
 
     public static int getWidth() {
@@ -34,6 +42,41 @@ public class Map {
         this.objects = objects;
     }
 
+
+    public List<Entity> getObjects() {
+        return objects;
+    }
+
+    public void createMap() throws IOException {
+        Level level = new Level();
+        level.initMapLevel();
+        int endX = 0;
+        int endY = 0;
+        Bomber bomber = new Bomber(0, 0, Sprite.grass.getFxImage());
+        if (objects != null) {
+            int count = 0;
+            for (Entity entity : objects) {
+                if (entity instanceof Bomber) {
+                    bomber = (Bomber) entity;
+                    count++;
+                }
+                if (entity instanceof Portal) {
+                    endX = entity.getX();
+                    endY = entity.getY();
+                    count++;
+                }
+                if (count == 2) {
+                    break;
+                }
+            }
+        }
+//        while (bomber != null) {
+//            System.out.println(endX + ", " + endY);
+//            System.out.println("bomber: " + bomber.getX() + ", " + bomber.getY());
+//            if (((bomber.getX() == endX) && (bomber.getY() == endY)) || objects == null) {
+//                break;
+//            }
+//        }
 
     public List<Entity> getObjects() {
         return objects;
@@ -92,31 +135,33 @@ public class Map {
 
     public boolean checkCollision(Entity e1, Entity e2) {
         int leftE1 = e1.getX();
-        int rightE1 = e1.getX() + 10;
+        int rightE1 = e1.getX() + 28;
         int topE1 = e1.getY();
-        int bottomE1 = e1.getY() + 15;
+        int bottomE1 = e1.getY() + 28;
 
         int leftE2 = e2.getX();
-        int rightE2 = e2.getX() + 16;
+        int rightE2 = e2.getX() + 28;
         int topE2 = e2.getY();
-        int bottomE2 = e2.getY() + 16;
+        int bottomE2 = e2.getY() + 28;
 
-        if (bottomE1 < topE2) {
+        if (bottomE1 <= topE2) {
             return false;
         }
 
-        if (topE1 > bottomE2) {
+        if (topE1 >= bottomE2) {
             return false;
         }
 
-        if (rightE1 < leftE2) {
+        if (rightE1 <= leftE2) {
             return false;
         }
 
-        if (leftE1 > rightE2) {
+        if (leftE1 >= rightE2) {
             return false;
         }
         return true;
     }
+
+
 }
 

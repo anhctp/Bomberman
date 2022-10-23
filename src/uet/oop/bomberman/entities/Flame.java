@@ -2,24 +2,22 @@ package uet.oop.bomberman.entities;
 
 import javafx.scene.image.Image;
 import uet.oop.bomberman.Map;
+import uet.oop.bomberman.graphics.Sprite;
 
-public class Flame extends Entity{
-//    private static int time = 120;
+import static uet.oop.bomberman.BombermanGame.m;
+
+public class Flame extends Entity {
+    //    private static int time = 120;
     public Flame(int x, int y, Image img) {
         super(x, y, img);
+        left = x;
+        right = x + 32;
+        top = y;
+        bottom = y + 32;
     }
 
-//    public static void setTime(int time) {
-//        Flame.time = time;
-//    }
 
     @Override
     public void update() {
-//        if(time == 0) {
-//            appear = false;
-//            return;
-//        }
-//        time--;
     }
-
 }

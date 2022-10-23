@@ -8,6 +8,7 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.stage.Stage;
 import uet.oop.bomberman.entities.*;
+import uet.oop.bomberman.entities.enemy.Balloom;
 import uet.oop.bomberman.graphics.Sprite;
 import uet.oop.bomberman.sound.Sound;
 
@@ -26,11 +27,15 @@ public class BombermanGame extends Application {
 
     public static final int WIDTH = 40;
     public static final int HEIGHT = 30;
+
+    private boolean running = false;
+    private GraphicsContext gc;
+    private Canvas canvas;
+
     public static List<Entity> entities = new ArrayList<>();
     public static List<Entity> stillObjects = new ArrayList<>();
     public static Map m = new Map();
-    private List<Entity> stillObjects = new ArrayList<>();
-    KeyHandler keyHandler = new KeyHandler();
+    //private List<Entity> stillObjects = new ArrayList<>();
 
     private GraphicsContext gc;
     private Canvas canvas;
@@ -42,6 +47,7 @@ public class BombermanGame extends Application {
 //    private static final long TIME_PER_FRAME = 1000000000 / FPS;
     @Override
     public void start(Stage stage) throws IOException {
+        running = true;
         // Sound
         sound.play();
         sound.loop();
@@ -85,17 +91,19 @@ public class BombermanGame extends Application {
 
 
         AnimationTimer timer = new AnimationTimer() {
+            private  long lastTime = 0;
             @Override
-            public void handle(long l) {
-                render();
-                update();
-//                try {
-//                    TimeUnit.NANOSECONDS.sleep(100);
-//                } catch (InterruptedException e) {
-//                    e.printStackTrace();
-//                }
+            public void handle(long now) {
+                if(now - lastTime > 1000000000 / 60) {
+                    lastTime = now;
+                    try {
+                        update();
+                        render();
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
+                }
             }
-
         };
         timer.start();
     }
