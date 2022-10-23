@@ -1,6 +1,7 @@
 package uet.oop.bomberman;
 
 //import com.sun.webkit.dom.EntityImpl;
+
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.event.EventHandler;
@@ -12,6 +13,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 import uet.oop.bomberman.entities.*;
+import uet.oop.bomberman.entities.enemy.Balloom;
 import uet.oop.bomberman.graphics.Sprite;
 
 import javax.swing.plaf.basic.BasicTreeUI;
@@ -23,26 +25,31 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
+import static uet.oop.bomberman.Map.map;
+
 public class BombermanGame extends Application {
 
     public static final int WIDTH = 40;
     public static final int HEIGHT = 30;
 
+    private boolean running = false;
     private GraphicsContext gc;
     private Canvas canvas;
-    public static List<Entity> entities = new ArrayList<>();
-    public static Map m = new Map();
-    private List<Entity> stillObjects = new ArrayList<>();
-    KeyHandler keyHandler = new KeyHandler();
 
-//    private long lastTime;
+    public static List<Entity> entities = new ArrayList<>();
+    public static List<Entity> stillObjects = new ArrayList<>();
+    public static Map m = new Map();
+    //private List<Entity> stillObjects = new ArrayList<>();
+
+    //    private long lastTime;
 //    private static final int FPS = 30;
 //    private static final long TIME_PER_FRAME = 1000000000 / FPS;
     @Override
     public void start(Stage stage) throws IOException {
+        running = true;
         // Tao Canvas
-        m.createMap(stillObjects);
-        canvas = new Canvas(Sprite.SCALED_SIZE * m.getWidth(), Sprite.SCALED_SIZE * m.getHeight());
+        m.createMap();
+        canvas = new Canvas(Sprite.SCALED_SIZE * m.width, Sprite.SCALED_SIZE * m.height);
         gc = canvas.getGraphicsContext2D();
 
         // Tao root container
@@ -55,50 +62,49 @@ public class BombermanGame extends Application {
         stage.setTitle("Bomberman Game");
         stage.setScene(scene);
         stage.show();
+
+        addEntities();
         Bomber bomberman = new Bomber(1, 1, Sprite.player_right.getFxImage());
 
+        for (Entity e : m.getObjects()) {
+            if (e instanceof Bomber) {
+                bomberman = (Bomber) e;
+                break;
+            }
+        }
+
+        Bomber finalBomberman = bomberman;
         scene.setOnKeyPressed(e -> {
-            bomberman.handleKeyPressed(e);
-            bomberman.handleEvent(m, entities, gc);
+            finalBomberman.handleKeyPressed(e);
+            finalBomberman.handleEvent(m, entities, gc);
         });
         scene.setOnKeyReleased(e -> {
-            bomberman.handleKeyReleased(e);
-            bomberman.handleEvent(m, entities, gc);
+            finalBomberman.handleKeyReleased(e);
+            finalBomberman.handleEvent(m, entities, gc);
         });
-        entities.add(bomberman);
-        addBalloom();
+        entities.add(finalBomberman);
 
         AnimationTimer timer = new AnimationTimer() {
+            private  long lastTime = 0;
             @Override
-            public void handle(long l) {
-                render();
-                update();
-//                try {
-//                    TimeUnit.NANOSECONDS.sleep(100);
-//                } catch (InterruptedException e) {
-//                    e.printStackTrace();
-//                }
+            public void handle(long now) {
+                if(now - lastTime > 1000000000 / 60) {
+                    lastTime = now;
+                    try {
+                        update();
+                        render();
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
+                }
             }
-
         };
         timer.start();
-    }
 
-//    public long delay() {
-//        long endTime = System.nanoTime();
-//        long delayTime = endTime - lastTime;
-//        lastTime = endTime;
-//        if (delayTime < TIME_PER_FRAME) {
-//
-//            return TIME_PER_FRAME - delayTime;
-//        }
-//        return 0;
-//    }
-    public void addBalloom() {
-        for(Entity entity : m.getObjects()) {
-            if (entity instanceof Balloom) {
-                entities.add(entity);
-            }
+    }
+    public void addEntities() {
+        for (Entity entity : m.getObjects()) {
+            entities.add(entity);
         }
     }
 
@@ -108,8 +114,8 @@ public class BombermanGame extends Application {
 
     public void render() {
         gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
-//        stillObjects.forEach(g -> g.render(gc));
-        m.getMap().forEach(g->g.render(gc));
+        map.forEach(g -> g.render(gc));
+        //stillObjects.forEach(g -> g.render(gc));
         entities.forEach(g -> g.render(gc));
     }
 }

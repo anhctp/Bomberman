@@ -204,7 +204,8 @@ public class Sprite {
 		_realHeight = rh;
 		load();
 	}
-	
+
+
 	public Sprite(int size, int color) {
 		SIZE = size;
 		_pixels = new int[SIZE * SIZE];

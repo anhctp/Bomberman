@@ -6,6 +6,7 @@ import javafx.scene.input.KeyCode;
 import uet.oop.bomberman.BombermanGame;
 import uet.oop.bomberman.KeyHandler;
 import uet.oop.bomberman.Map;
+import uet.oop.bomberman.entities.enemy.Enemy;
 import uet.oop.bomberman.graphics.Sprite;
 
 import javax.swing.plaf.basic.BasicTreeUI;
@@ -18,13 +19,13 @@ import static uet.oop.bomberman.BombermanGame.m;
 import static uet.oop.bomberman.BombermanGame.entities;
 
 public class Bomber extends Entity {
-    private static int STEP = 4;
+    private static int STEP = 1;
 //    private int velocity = STEP / 8;
-    private int maxBomb = 1; //
-    protected int num = 1;
+    private int maxBomb = 2; //
+    protected int num = 0;
     public KeyHandler keyHandler;
     //    private boolean alive = true;
-    public List<Bomb> bombs = new ArrayList<>();
+    public static List<Bomb> bombs = new ArrayList<>();
     private int flameLvOfbbm = 1;
     private int timeBetween2Bomb = 240;
     private boolean upPressed = false;
@@ -64,35 +65,43 @@ public class Bomber extends Entity {
                 deadTime--;
             }
         }
+        if(upPressed) {
+            moveUp();
+        }
+        if(downPressed) {
+            moveDown();
+        }
+        if(leftPressed) {
+            moveLeft();
+        }
+        if(rightPressed) {
+            moveRight();
+        }
+
     }
 
-    public void moveUp(GraphicsContext gc) {
+    public void moveUp() {
         Entity aboveLeft = m.getEntity(this.getX() / 32, (this.getY() - 1) / 32);
         Entity aboveRight = m.getEntity((this.getX() + Sprite.DEFAULT_SIZE) / 32, (this.getY() - 1) / 32);
         int count = 0;
         while (aboveLeft.goThrough && aboveRight.goThrough && (count < STEP)) {
-//            state = State.UP;
             y--;
             count++;
             aboveLeft = m.getEntity(this.getX() / 32, (this.getY() - 1) / 32);
             aboveRight = m.getEntity((this.getX() + Sprite.DEFAULT_SIZE) / 32, (this.getY() - 1) / 32);
-            render(gc);
         }
         top = y;
         bottom = y + Sprite.player_up.get_realHeight() * 2;
         left = x;
         right = x + Sprite.player_up.get_realWidth() * 2;
         setImg();
-        System.out.println(x + " " + y);
-
     }
 
-    public void moveDown(GraphicsContext gc) {
+    public void moveDown() {
         Entity underLeft = m.getEntity(this.getX() / 32, (this.getY() + Sprite.player_down.get_realHeight() * 2 + 1) / 32);
         Entity underRight = m.getEntity((this.getX() + Sprite.DEFAULT_SIZE) / 32, (this.getY() + Sprite.player_down.get_realHeight() * 2 + 1) / 32);
         int count = 0;
         while (underLeft.goThrough && underRight.goThrough && (count < STEP)) {
-//            state = State.DOWN;
             y++;
             count++;
             underLeft = m.getEntity(this.getX() / 32, (this.getY() + Sprite.SCALED_SIZE + 1) / 32);
@@ -104,8 +113,6 @@ public class Bomber extends Entity {
         left = x;
         right = x + Sprite.player_down.get_realWidth() * 2;
         setImg();
-        System.out.println(x + " " + y);
-
     }
 
     public void moveLeft() {
@@ -113,47 +120,67 @@ public class Bomber extends Entity {
         Entity above = m.getEntity((this.getX() - 1) / 32, this.getY() / 32);
         Entity under = m.getEntity((this.getX() - 1) / 32, (this.getY() + Sprite.player_left.get_realHeight() * 2 - STEP) / 32);
         int count = 0;
+        int cnt1 = 0;
+        int cnt2 = 0;
+        while((above.goThrough == false) && ((above.y + 32 - y) <= 15) && cnt1 < 15) {
+            y++;
+            cnt1++;
+            above = m.getEntity((this.getX() + Sprite.player_right.get_realWidth() * 2 + 1) / 32, (this.getY() + 1)/ 32);
+        }
+        while((under.goThrough == false) && ((y + 32 - under.y) <= 15) && (cnt2 < 10)) {
+            y--;
+            System.out.println(y);
+            cnt2++;
+            under = m.getEntity((this.getX() + Sprite.player_right.get_realWidth() * 2 + 1) / 32, (this.getY() + Sprite.player_right.get_realHeight() * 2 - 1) / 32);
+        }
 
         while(above.goThrough && under.goThrough && (count < STEP)) {
-//            state = State.LEFT;
             x--;
             count++;
             above = m.getEntity((this.getX() - 1) / 32, this.getY() / 32);
             under = m.getEntity((this.getX() - 1) / 32, (this.getY() + Sprite.player_left.get_realHeight() * 2 - STEP) / 32);
-            update();
         }
         top = y;
         bottom = y + Sprite.player_left.get_realHeight() * 2;
         left = x;
         right = x + Sprite.player_left.get_realWidth() * 2;
         setImg();
-        System.out.println(x + " " + y);
     }
 
     public void moveRight() {
-        Entity above = m.getEntity((this.getX() + Sprite.player_right.get_realWidth() * 2 + 1) / 32, this.getY() / 32);
-        Entity under = m.getEntity((this.getX() + Sprite.player_right.get_realWidth() * 2 + 1) / 32, (this.getY() + Sprite.player_right.get_realHeight() * 2 - (STEP)) / 32);
+        Entity above = m.getEntity((this.getX() + Sprite.player_right.get_realWidth() * 2 + 1) / 32, (this.getY() + 1)/ 32);
+        Entity under = m.getEntity((this.getX() + Sprite.player_right.get_realWidth() * 2 + 1) / 32, (this.getY() + Sprite.player_right.get_realHeight() * 2 - 1) / 32);
         int count = 0;
+        int cnt1 = 0;
+        int cnt2 = 0;
+        while((above.goThrough == false) && ((above.y + 32 - y) <= 15) && cnt1 < 15) {
+            y++;
+            cnt1++;
+            above = m.getEntity((this.getX() + Sprite.player_right.get_realWidth() * 2 + 1) / 32, (this.getY() + 1)/ 32);
+        }
+        while((under.goThrough == false) && ((y + 32 - under.y) <= 15) && (cnt2 < 10)) {
+            y--;
+            System.out.println(y);
+            cnt2++;
+            under = m.getEntity((this.getX() + Sprite.player_right.get_realWidth() * 2 + 1) / 32, (this.getY() + Sprite.player_right.get_realHeight() * 2 - 1) / 32);
+        }
         while(above.goThrough && under.goThrough && (count < STEP)) {
-//            state = State.RIGHT;
             x++;
             count++;
-            above = m.getEntity((this.getX() + Sprite.player_right.get_realWidth() * 2 + 1) / 32, this.getY() / 32);
-            under = m.getEntity((this.getX() + Sprite.player_right.get_realWidth() * 2 + 1) / 32, (this.getY() + Sprite.player_right.get_realHeight() * 2 - (STEP)) / 32);
-            update();
+            above = m.getEntity((this.getX() + Sprite.player_right.get_realWidth() * 2 + 1) / 32, (this.getY() + 1)/ 32);
+            under = m.getEntity((this.getX() + Sprite.player_right.get_realWidth() * 2 + 1) / 32, (this.getY() + Sprite.player_right.get_realHeight() * 2 + 1) / 32);
         }
+
         top = y;
-        bottom = y + Sprite.player_right.get_realHeight() * 2;
+        bottom = y + Sprite.player_right.get_realHeight() * 2 ;
         left = x;
         right = x + Sprite.player_right.get_realWidth() * 2;
         setImg();
-        System.out.println(x + " " + y);
-
     }
 
     public boolean checkItem(Entity entity, Entity grass) {
         if(entity instanceof SpeedItem) {
-            STEP += 4;
+            STEP += 2;
             return true;
         }
         if(entity instanceof BombItem) {
@@ -173,28 +200,28 @@ public class Bomber extends Entity {
     }
         public void handleEvent(Map m, List<Entity> entities, GraphicsContext gc) {
             if (upPressed) {
-                moveUp(gc);
+//                moveUp();
                 Entity grass1 = new Grass(this.getX() / 32, (this.getY()) / 32, Sprite.grass.getFxImage());
                 if (checkItem(m.getEntity(this.getX() / 32, this.getY() / 32), grass1)) {
                     m.changeEntity(this.getX() / 32, this.getY() / 32, grass1);
                 }
             }
             else if (downPressed) {
-                moveDown(gc);
+//                moveDown();
                 Entity grass2 = new Grass(this.getX() / 32, (this.getY() + Sprite.player_down.get_realHeight() * 2) / 32, Sprite.grass.getFxImage());
                 if (checkItem(m.getEntity(this.getX() / 32, (this.getY() + Sprite.player_down.get_realHeight() * 2) / 32), grass2)) {
                     m.changeEntity(this.getX() / 32, (this.getY() + Sprite.player_down.get_realHeight() * 2) / 32, grass2);
                 }
             }
             else if (leftPressed) {
-                moveLeft();
+//                moveLeft();
                 Entity grass3 = new Grass(this.getX() / 32, (this.getY()) / 32, Sprite.grass.getFxImage());
                 if (checkItem(m.getEntity(this.getX() / 32, this.getY() / 32), grass3)) {
                     m.changeEntity(this.getX() / 32, this.getY() / 32, grass3);
                 }
             }
             else if (rightPressed) {
-                moveRight();
+//                moveRight();
                 Entity grass4 = new Grass((this.getX() + Sprite.player_right.get_realWidth() * 2) / 32, (this.getY()) / 32, Sprite.grass.getFxImage());
                 if (checkItem(m.getEntity((this.getX() + Sprite.player_right.get_realWidth() * 2) / 32, this.getY() / 32), grass4)) {
                     m.changeEntity((this.getX() + Sprite.player_right.get_realWidth() * 2) / 32, this.getY() / 32, grass4);
@@ -203,8 +230,11 @@ public class Bomber extends Entity {
             else if (spacePressed) {
                 if (bombs.size() < maxBomb) {
                     Bomb bomb = new Bomb(x / 32, (y + 16) / 32, Sprite.bomb.getFxImage(), flameLvOfbbm); // 16 = height of bomber / 2
+                    setImg();
                     bomb.setBomb(entities, bomb);
                     bombs.add(bomb);
+//                    m.bombs.add(bomb);
+                    entities.add(bomb);
                 }
             }
 
@@ -276,7 +306,7 @@ public class Bomber extends Entity {
         return dead;
     }
 
-    public boolean coolisionWith(Entity e) {
+    public boolean collisionWith(Entity e) {
         int left = e.getX();
         int right = e.getX() + Sprite.SCALED_SIZE;
         int top = e.getY();
@@ -301,36 +331,40 @@ public class Bomber extends Entity {
     }
     public void setImg() {
         if(dead) {
-            this.img = Sprite.movingSprite(Sprite.player_dead1, Sprite.player_dead2, Sprite.player_dead3, num, 5).getFxImage();
+            this.img = Sprite.movingSprite(Sprite.player_dead1, Sprite.player_dead2, Sprite.player_dead3, num, 30).getFxImage();
         } else {
+
             if(upPressed) {
-                num++;
-                if (num > 20) {
-                    num = 1;
-                }
-                this.img = Sprite.movingSprite(Sprite.player_up, Sprite.player_up_1, Sprite.player_up_2, num, 5).getFxImage();
+                if(num < 7500) {
+                    num++;
+                } else num = 0;
+                this.img = Sprite.movingSprite(Sprite.player_up, Sprite.player_up_1, Sprite.player_up_2, num, 30).getFxImage();
             }
             if(downPressed) {
-                num++;
-                if (num > 20) {
-                    num = 1;
-                }
-                this.img = Sprite.movingSprite(Sprite.player_down, Sprite.player_down_1, Sprite.player_down_2, num, 5).getFxImage();
+                if(num < 7500) {
+                    num++;
+                } else num = 0;
+                this.img = Sprite.movingSprite(Sprite.player_down, Sprite.player_down_1, Sprite.player_down_2, num, 30).getFxImage();
             }
             if(leftPressed) {
-                num++;
-                if (num > 20) {
-                    num = 1;
-                }
-                this.img = Sprite.movingSprite(Sprite.player_left, Sprite.player_left_1, Sprite.player_left_2, num, 5).getFxImage();
+                if(num < 7500) {
+                    num++;
+                } else num = 0;
+                this.img = Sprite.movingSprite(Sprite.player_left, Sprite.player_left_1, Sprite.player_left_2, num, 30).getFxImage();
             }
             if(rightPressed) {
-                num++;
-                if (num > 20) {
-                    num = 1;
-                }
-                this.img = Sprite.movingSprite(Sprite.player_right, Sprite.player_right_1, Sprite.player_right_2, num, 5).getFxImage();
+                if(num < 7500) {
+                    num++;
+                } else num = 0;
+                this.img = Sprite.movingSprite(Sprite.player_right, Sprite.player_right_1, Sprite.player_right_2, num, 30).getFxImage();
             }
+//            if(spacePressed) {
+//                System.out.println("go here");
+//                if(num < 7500) {
+//                    num++;
+//                } else num = 0;
+//                this.img = Sprite.movingSprite(Sprite.bomb, Sprite.bomb_1, Sprite.bomb_2, num, 30).getFxImage();
+//            }
         }
 
 

@@ -21,7 +21,8 @@ public abstract class Entity {
     protected int velocity = 0;
     public boolean goThrough = true;
     protected int x;
-
+    //Tọa độ Y tính từ góc trái trên trong Canvas
+    protected int y;
     public int getLeft() {
         return left;
     }
@@ -40,8 +41,7 @@ public abstract class Entity {
 
     protected boolean appear = true;
 
-    //Tọa độ Y tính từ góc trái trên trong Canvas
-    protected int y;
+
 
     protected Image img;
 
@@ -50,7 +50,6 @@ public abstract class Entity {
         this.x = xUnit * Sprite.SCALED_SIZE;
         this.y = yUnit * Sprite.SCALED_SIZE;
         this.img = img;
-//        this.addKeyListener(this);
     }
 
     public int getVelocity() {
