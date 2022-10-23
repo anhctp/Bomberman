@@ -7,6 +7,9 @@ import uet.oop.bomberman.BombermanGame;
 import uet.oop.bomberman.KeyHandler;
 import uet.oop.bomberman.Map;
 import uet.oop.bomberman.entities.enemy.Enemy;
+import uet.oop.bomberman.entities.items.BombItem;
+import uet.oop.bomberman.entities.items.FlameItem;
+import uet.oop.bomberman.entities.items.SpeedItem;
 import uet.oop.bomberman.graphics.Sprite;
 
 import javax.swing.plaf.basic.BasicTreeUI;

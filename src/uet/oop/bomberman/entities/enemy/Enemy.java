@@ -17,7 +17,7 @@ public class Enemy extends Entity {
     protected STATE state = null;
     protected int num = 1;
     protected int time = 10;
-    protected int timeDead = 150;
+    protected int timeDead = 100;
     protected boolean appear = false;
     protected boolean isDead = false;
     protected boolean isPlaySoundDead = false;

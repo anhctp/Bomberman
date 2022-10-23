@@ -2,6 +2,7 @@ package uet.oop.bomberman.level;
 
 import uet.oop.bomberman.entities.*;
 import uet.oop.bomberman.entities.enemy.Balloom;
+import uet.oop.bomberman.entities.enemy.Ghost;
 import uet.oop.bomberman.entities.enemy.Oneal;
 import uet.oop.bomberman.entities.items.BombItem;
 import uet.oop.bomberman.entities.items.FlameItem;
@@ -72,6 +73,10 @@ public class Level {
                     case '2':
                         object = new Grass(i, j, Sprite.grass.getFxImage());
                         objectName = new Oneal(i, j, Sprite.oneal_left1.getFxImage());
+                        break;
+                    case '3':
+                        object = new Grass(i, j, Sprite.grass.getFxImage());
+                        objectName = new Ghost(i, j, Sprite.doll_left1.getFxImage());
                         break;
                     case 'b':
                         item = new BombItem(i, j, Sprite.powerup_bombs.getFxImage());
