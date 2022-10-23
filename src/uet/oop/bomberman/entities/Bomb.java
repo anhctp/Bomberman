@@ -11,24 +11,13 @@ import javax.swing.plaf.synth.SynthRootPaneUI;
 import java.util.ArrayList;
 import java.util.List;
 
-import static uet.oop.bomberman.BombermanGame.entities;
-import static uet.oop.bomberman.BombermanGame.m;
+import static uet.oop.bomberman.BombermanGame.*;
 import static uet.oop.bomberman.Map.map;
 
 public class Bomb extends Entity {
     private int beforeExplodeTime;
     private int explodeTime;
     public boolean isPlaySoundExplosion = false;
-
-    public void setFlameLv(int flameLv) {
-        this.flameLv = flameLv;
-    }
-
-    public int getFlameLv() {
-        return flameLv;
-    }
-
-
     public void setFlameLv(int flameLv) {
         this.flameLv = flameLv;
     }
@@ -136,6 +125,10 @@ public class Bomb extends Entity {
 
     public void explode(int x, int y, Map m) {
         flames.clear();
+        if (!isPlaySoundExplosion) {
+            soundEffect("res/Sound/bomb.wav");
+            isPlaySoundExplosion = true;
+        }
         List<Flame> f = new ArrayList<>();
         Flame flameCenter;
         Flame flameAbove1;
@@ -313,11 +306,7 @@ public class Bomb extends Entity {
             default:
                 break;
         }
-
-        if (!isPlaySoundExplosion) {
-            soundEffect("res/Sound/bomb.wav");
-            isPlaySoundExplosion = true;
-        }
+        isAcitve = true;
     }
     @Override
     public void render(GraphicsContext gc) {
@@ -361,6 +350,4 @@ public class Bomb extends Entity {
                 break;
         }
     }
-
-
 }

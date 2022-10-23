@@ -5,30 +5,22 @@ import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import uet.oop.bomberman.BombermanGame;
 import uet.oop.bomberman.KeyHandler;
-import javafx.scene.input.KeyCode;
-import uet.oop.bomberman.KeyHandler;
 import uet.oop.bomberman.Map;
 import uet.oop.bomberman.entities.enemy.Enemy;
-import uet.oop.bomberman.entities.items.BombItem;
-import uet.oop.bomberman.entities.items.FlameItem;
-import uet.oop.bomberman.entities.items.SpeedItem;
 import uet.oop.bomberman.graphics.Sprite;
 
 import javax.swing.plaf.basic.BasicTreeUI;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import static uet.oop.bomberman.BombermanGame.*;
-
-import static uet.oop.bomberman.BombermanGame.m;
-import static uet.oop.bomberman.BombermanGame.entities;
 
 public class Bomber extends Entity {
     private static int STEP = 4;
     //    private int velocity = STEP / 8;
-
-    private int maxBomb = 2; //
+    private int maxBomb = 1; //
     protected int num = 0;
     public KeyHandler keyHandler;
     //    private boolean alive = true;
@@ -41,14 +33,11 @@ public class Bomber extends Entity {
     private boolean rightPressed = false;
     private boolean spacePressed = false;
     private int deadTime = 120;
-
     private enum State {
         UP, DOWN, LEFT, RIGHT
     }
-
     boolean dead = false;
     private State state = State.RIGHT;
-
     public Bomber(int x, int y, Image img) {
 
         super(x, y, img);
@@ -62,8 +51,6 @@ public class Bomber extends Entity {
 
     @Override
     public void update() {
-        for (int i = 0; i < bombs.size(); i++) {
-            if (bombs.get(i).getIsExplode()) {
         //Load next level
         for (Entity e : entities) {
             if (e instanceof Portal) {
@@ -82,6 +69,7 @@ public class Bomber extends Entity {
                 }
             }
         }
+        //Remove bomb
         for (int i = 0; i < bombs.size(); i++) {
             if (bombs.get(i).getIsExplode()) {
                 bombs.remove(bombs.get(i));
@@ -148,7 +136,7 @@ public class Bomber extends Entity {
     public void moveLeft() {
 
         Entity above = m.getEntity((this.getX() - 1) / 32, this.getY() / 32);
-        Entity under = m.getEntity((this.getX() - 1) / 32, (this.getY() + Sprite.player_left.get_realHeight() * 2 - STEP) / 32);
+        Entity under = m.getEntity((this.getX() - 1) / 32, (this.getY() + Sprite.player_left.get_realHeight() * 2 - 1) / 32);
         int count = 0;
         int cnt1 = 0;
         int cnt2 = 0;
@@ -198,7 +186,7 @@ public class Bomber extends Entity {
             x++;
             count++;
             above = m.getEntity((this.getX() + Sprite.player_right.get_realWidth() * 2 + 1) / 32, (this.getY() + 1)/ 32);
-            under = m.getEntity((this.getX() + Sprite.player_right.get_realWidth() * 2 + 1) / 32, (this.getY() + Sprite.player_right.get_realHeight() * 2 + 1) / 32);
+            under = m.getEntity((this.getX() + Sprite.player_right.get_realWidth() * 2 + 1) / 32, (this.getY() + Sprite.player_right.get_realHeight() * 2 - 1) / 32);
         }
 
         top = y;
@@ -206,27 +194,6 @@ public class Bomber extends Entity {
         left = x;
         right = x + Sprite.player_right.get_realWidth() * 2;
         setImg();
-    }
-
-    public boolean checkItem(Entity entity, Entity grass) {
-        if (entity instanceof SpeedItem) {
-            STEP += 4;
-            return true;
-        }
-        if (entity instanceof BombItem) {
-            maxBomb += 1;
-            return true;
-        }
-        if (entity instanceof FlameItem) {
-            flameLvOfbbm++;
-            for (Bomb b : bombs) {
-                if (b.isAcitve() == false) {
-                    b.setFlameLv(flameLvOfbbm);
-                }
-            }
-            return true;
-        }
-        return false;
     }
 
     public boolean checkItem(Entity entity, Entity grass) {
@@ -249,45 +216,45 @@ public class Bomber extends Entity {
         }
         return false;
     }
-        public void handleEvent(Map m, List<Entity> entities, GraphicsContext gc) {
-            if (upPressed) {
+    public void handleEvent(Map m, List<Entity> entities, GraphicsContext gc) {
+        if (upPressed) {
 //                moveUp();
-                Entity grass1 = new Grass(this.getX() / 32, (this.getY()) / 32, Sprite.grass.getFxImage());
-                if (checkItem(m.getEntity(this.getX() / 32, this.getY() / 32), grass1)) {
-                    m.changeEntity(this.getX() / 32, this.getY() / 32, grass1);
-                }
+            Entity grass1 = new Grass(this.getX() / 32, (this.getY()) / 32, Sprite.grass.getFxImage());
+            if (checkItem(m.getEntity(this.getX() / 32, this.getY() / 32), grass1)) {
+                m.changeEntity(this.getX() / 32, this.getY() / 32, grass1);
             }
-            else if (downPressed) {
+        }
+        else if (downPressed) {
 //                moveDown();
-                Entity grass2 = new Grass(this.getX() / 32, (this.getY() + Sprite.player_down.get_realHeight() * 2) / 32, Sprite.grass.getFxImage());
-                if (checkItem(m.getEntity(this.getX() / 32, (this.getY() + Sprite.player_down.get_realHeight() * 2) / 32), grass2)) {
-                    m.changeEntity(this.getX() / 32, (this.getY() + Sprite.player_down.get_realHeight() * 2) / 32, grass2);
-                }
+            Entity grass2 = new Grass(this.getX() / 32, (this.getY() + Sprite.player_down.get_realHeight() * 2) / 32, Sprite.grass.getFxImage());
+            if (checkItem(m.getEntity(this.getX() / 32, (this.getY() + Sprite.player_down.get_realHeight() * 2) / 32), grass2)) {
+                m.changeEntity(this.getX() / 32, (this.getY() + Sprite.player_down.get_realHeight() * 2) / 32, grass2);
             }
-            else if (leftPressed) {
+        }
+        else if (leftPressed) {
 //                moveLeft();
-                Entity grass3 = new Grass(this.getX() / 32, (this.getY()) / 32, Sprite.grass.getFxImage());
-                if (checkItem(m.getEntity(this.getX() / 32, this.getY() / 32), grass3)) {
-                    m.changeEntity(this.getX() / 32, this.getY() / 32, grass3);
-                }
+            Entity grass3 = new Grass(this.getX() / 32, (this.getY()) / 32, Sprite.grass.getFxImage());
+            if (checkItem(m.getEntity(this.getX() / 32, this.getY() / 32), grass3)) {
+                m.changeEntity(this.getX() / 32, this.getY() / 32, grass3);
             }
-            else if (rightPressed) {
+        }
+        else if (rightPressed) {
 //                moveRight();
-                Entity grass4 = new Grass((this.getX() + Sprite.player_right.get_realWidth() * 2) / 32, (this.getY()) / 32, Sprite.grass.getFxImage());
-                if (checkItem(m.getEntity((this.getX() + Sprite.player_right.get_realWidth() * 2) / 32, this.getY() / 32), grass4)) {
-                    m.changeEntity((this.getX() + Sprite.player_right.get_realWidth() * 2) / 32, this.getY() / 32, grass4);
-                }
+            Entity grass4 = new Grass((this.getX() + Sprite.player_right.get_realWidth() * 2) / 32, (this.getY()) / 32, Sprite.grass.getFxImage());
+            if (checkItem(m.getEntity((this.getX() + Sprite.player_right.get_realWidth() * 2) / 32, this.getY() / 32), grass4)) {
+                m.changeEntity((this.getX() + Sprite.player_right.get_realWidth() * 2) / 32, this.getY() / 32, grass4);
             }
-            else if (spacePressed) {
-                if (bombs.size() < maxBomb) {
-                    Bomb bomb = new Bomb(x / 32, (y + 16) / 32, Sprite.bomb.getFxImage(), flameLvOfbbm); // 16 = height of bomber / 2
-                    setImg();
-                    bomb.setBomb(entities, bomb);
-                    bombs.add(bomb);
-//                    m.bombs.add(bomb);
-                    entities.add(bomb);
-                }
+        }
+        else if (spacePressed) {
+            if (bombs.size() < maxBomb) {
+                Bomb bomb = new Bomb(x / 32, (y + 16) / 32, Sprite.bomb.getFxImage(), flameLvOfbbm); // 16 = height of bomber / 2
+                setImg();
+                bomb.setBomb(entities, bomb);
+                bombs.add(bomb);
+                bomb.isPlaySoundExplosion = false;
+                entities.add(bomb);
             }
+        }
 
     }
 
@@ -348,7 +315,7 @@ public class Bomber extends Entity {
                 for (int k = 0; k < m.getObjects().size(); k++) {
                     if (m.getObjects().get(k) instanceof Enemy) {
                         if (m.checkCollision(bombs.get(i).flames.get(j), m.getObjects().get(k))) {
-                            ((Enemy) m.getObjects().get(k)).state = Enemy.STATE.DEAD;
+                            ((Enemy) m.getObjects().get(k)).setState(Enemy.STATE.DEAD);
                         }
                     }
                 }
@@ -417,7 +384,5 @@ public class Bomber extends Entity {
 //                this.img = Sprite.movingSprite(Sprite.bomb, Sprite.bomb_1, Sprite.bomb_2, num, 30).getFxImage();
 //            }
         }
-
-
     }
 }

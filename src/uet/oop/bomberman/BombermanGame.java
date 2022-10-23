@@ -37,9 +37,6 @@ public class BombermanGame extends Application {
     public static Map m = new Map();
     //private List<Entity> stillObjects = new ArrayList<>();
 
-    private GraphicsContext gc;
-    private Canvas canvas;
-
     static Sound sound = new Sound("res/Sound/music.wav");
 
 //    private long lastTime;
@@ -100,7 +97,6 @@ public class BombermanGame extends Application {
                         update();
                         render();
                     } catch (Exception e) {
-                        throw new RuntimeException(e);
                     }
                 }
             }

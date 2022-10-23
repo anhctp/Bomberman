@@ -2,8 +2,6 @@ package uet.oop.bomberman;
 
 import javafx.scene.canvas.GraphicsContext;
 import uet.oop.bomberman.entities.*;
-import uet.oop.bomberman.entities.enemy.Balloom;
-import uet.oop.bomberman.entities.enemy.Oneal;
 import uet.oop.bomberman.graphics.Sprite;
 import uet.oop.bomberman.level.Level;
 
@@ -24,13 +22,10 @@ public class Map {
     public static List<Entity> bombs = new ArrayList<>();
     public static List<List<Integer>> getBlocks = new ArrayList<List<Integer>>();
     public static int nextLevel = 1;
-    List<Entity> map = new ArrayList<>();
-
     public static int getWidth() {
         return width;
     }
 
-    public static int nextLevel = 1;
     public static int getHeight() {
         return height;
     }
@@ -43,44 +38,6 @@ public class Map {
     }
 
 
-    public List<Entity> getObjects() {
-        return objects;
-    }
-
-    public void createMap() throws IOException {
-        Level level = new Level();
-        level.initMapLevel();
-        int endX = 0;
-        int endY = 0;
-        Bomber bomber = new Bomber(0, 0, Sprite.grass.getFxImage());
-        if (objects != null) {
-            int count = 0;
-            for (Entity entity : objects) {
-                if (entity instanceof Bomber) {
-                    bomber = (Bomber) entity;
-                    count++;
-                }
-                if (entity instanceof Portal) {
-                    endX = entity.getX();
-                    endY = entity.getY();
-                    count++;
-                }
-                if (count == 2) {
-                    break;
-                }
-            }
-        }
-//        while (bomber != null) {
-//            System.out.println(endX + ", " + endY);
-//            System.out.println("bomber: " + bomber.getX() + ", " + bomber.getY());
-//            if (((bomber.getX() == endX) && (bomber.getY() == endY)) || objects == null) {
-//                break;
-//            }
-//        }
-
-    public List<Entity> getObjects() {
-        return objects;
-    }
 
     public void createMap() {
         map.clear();
@@ -93,6 +50,10 @@ public class Map {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public List<Entity> getObjects() {
+        return objects;
     }
 
     public Entity getEntity(int x, int y) {
