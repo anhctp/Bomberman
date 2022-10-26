@@ -1,5 +1,6 @@
 package uet.oop.bomberman.level;
 
+import javafx.scene.image.Image;
 import uet.oop.bomberman.entities.*;
 import uet.oop.bomberman.entities.enemy.Balloom;
 import uet.oop.bomberman.entities.enemy.Ghost;
@@ -18,25 +19,32 @@ import java.util.List;
 import java.util.Scanner;
 
 import static uet.oop.bomberman.BombermanGame.*;
+import static uet.oop.bomberman.BombermanGame.bomberman;
 import static uet.oop.bomberman.Map.*;
+import static uet.oop.bomberman.Map.level;
 
 public class Level {
     private List<Entity> objects = new ArrayList<>();
 
+    public static boolean isLevelUp;
+
     public void initMapLevel() throws IOException {
-        FileInputStream file = new FileInputStream("res/levels/Level" + nextLevel +".txt");
+        map.clear();
+        entities.clear();
+        objects.clear();
+        stillObjects.clear();
+        FileInputStream file = new FileInputStream("res/levels/Level" + nextLevel + ".txt");
         Scanner scanner = new Scanner(file);
-        int level = scanner.nextInt();
+        level = scanner.nextInt();
         int row = scanner.nextInt();
         int col = scanner.nextInt();
         width = col;
         height = row;
-
-        FileReader fr = new FileReader("res/levels/Level" + nextLevel +".txt");   //Creation of File Reader object
+        FileReader fr = new FileReader("res/levels/Level" + nextLevel + ".txt");   //Creation of File Reader object
         BufferedReader br = new BufferedReader(fr);  //Creation of BufferedReader object
         String s = br.readLine();
-        char[][] cMap = new char[row][col];
-        for (int i = 0; i < row; i++) {
+        char[][] cMap = new char[height][col];
+        for (int i = 0; i < height; i++) {
             for (int j = 0; j < col; j++) {
                 int c = 0;
                 c = br.read();
@@ -103,6 +111,18 @@ public class Level {
             String ss = br.readLine();
         }
         m.setObjects(objects);
-        nextLevel = level + 1;
+        nextLevel++;
+    }
+
+    public static void loadNextLevel() {
+        for (Entity entity : m.getObjects()) {
+            if (entity instanceof Bomber) {
+                bomberman.setX(entity.getX());
+                bomberman.setY(entity.getY());
+                break;
+            }
+        }
+        addEntities();
+        entities.add(bomberman);
     }
 }
