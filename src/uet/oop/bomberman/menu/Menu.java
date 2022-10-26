@@ -112,9 +112,11 @@ public class Menu {
         try {
             if (bomberman.isDead()) {
                 if (nextLevel < 4) {
+                    soundEffect("res/Sound/level.wav");
                     Image image = new Image(new FileInputStream("res/img/levelUp.png"), Sprite.SCALED_SIZE * m.width, Sprite.SCALED_SIZE * m.height, false, false);
                     author_view.setImage(image);
                 } else {
+                    soundEffect("res/Sound/win.wav");
                     Image image = new Image(new FileInputStream("res/img/win.png"), Sprite.SCALED_SIZE * m.width, Sprite.SCALED_SIZE * m.height, false, false);
                     author_view.setImage(image);
                 }

@@ -80,9 +80,11 @@ public class Bomber extends Entity {
         if (dead(m) || time_number == 0) {
             try {
                 if (hpCount > 0) {
+                    soundEffect("res/Sound/die.wav");
                     Image image = new Image(new FileInputStream("res/img/youDied.png"), Sprite.SCALED_SIZE * m.width, Sprite.SCALED_SIZE * m.height, false, false);
                     author_view.setImage(image);
                 } else {
+                    soundEffect("res/Sound/lose.wav");
                     Image image = new Image(new FileInputStream("res/img/gameOver.png"), Sprite.SCALED_SIZE * m.width, Sprite.SCALED_SIZE * m.height, false, false);
                     author_view.setImage(image);
                 }
@@ -229,27 +231,27 @@ public class Bomber extends Entity {
 
     public void handleEvent(Map m, List<Entity> entities, GraphicsContext gc) {
         if (upPressed) {
-//                moveUp();
             Entity grass1 = new Grass(this.getX() / 32, (this.getY()) / 32, Sprite.grass.getFxImage());
             if (checkItem(m.getEntity(this.getX() / 32, this.getY() / 32), grass1)) {
+                soundEffect("res/Sound/item.wav");
                 m.changeEntity(this.getX() / 32, this.getY() / 32, grass1);
             }
         } else if (downPressed) {
-//                moveDown();
             Entity grass2 = new Grass(this.getX() / 32, (this.getY() + Sprite.player_down.get_realHeight() * 2) / 32, Sprite.grass.getFxImage());
             if (checkItem(m.getEntity(this.getX() / 32, (this.getY() + Sprite.player_down.get_realHeight() * 2) / 32), grass2)) {
+                soundEffect("res/Sound/item.wav");
                 m.changeEntity(this.getX() / 32, (this.getY() + Sprite.player_down.get_realHeight() * 2) / 32, grass2);
             }
         } else if (leftPressed) {
-//                moveLeft();
             Entity grass3 = new Grass(this.getX() / 32, (this.getY()) / 32, Sprite.grass.getFxImage());
             if (checkItem(m.getEntity(this.getX() / 32, this.getY() / 32), grass3)) {
+                soundEffect("res/Sound/item.wav");
                 m.changeEntity(this.getX() / 32, this.getY() / 32, grass3);
             }
         } else if (rightPressed) {
-//                moveRight();
             Entity grass4 = new Grass((this.getX() + Sprite.player_right.get_realWidth() * 2) / 32, (this.getY()) / 32, Sprite.grass.getFxImage());
             if (checkItem(m.getEntity((this.getX() + Sprite.player_right.get_realWidth() * 2) / 32, this.getY() / 32), grass4)) {
+                soundEffect("res/Sound/item.wav");
                 m.changeEntity((this.getX() + Sprite.player_right.get_realWidth() * 2) / 32, this.getY() / 32, grass4);
             }
         } else if (spacePressed) {
