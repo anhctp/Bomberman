@@ -105,10 +105,8 @@ public class Bomb extends Entity {
                     m.changeEntity(x / 32 + 1, y / 32, grass);
                 }
             }
-            // Set lai bomb la grass
-            Grass grass = new Grass(this.getX() / 32, this.getY() / 32, Sprite.grass.getFxImage());
-            m.map.set(m.fromPosToIndex(this.getX() / 32, this.getY() / 32), grass);
-
+            // Remove bomb
+            m.map.remove(this);
         }
     }
 

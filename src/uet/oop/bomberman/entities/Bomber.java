@@ -23,6 +23,7 @@ import java.util.concurrent.TimeUnit;
 import static uet.oop.bomberman.BombermanGame.*;
 import static uet.oop.bomberman.Map.nextLevel;
 import static uet.oop.bomberman.menu.Menu.hpCount;
+import static uet.oop.bomberman.menu.Menu.time_number;
 
 public class Bomber extends Entity {
     private static int STEP = 4;
@@ -76,7 +77,7 @@ public class Bomber extends Entity {
             }
         }
 
-        if (dead(m)) {
+        if (dead(m) || time_number == 0) {
             try {
                 if (hpCount > 0) {
                     Image image = new Image(new FileInputStream("res/img/youDied.png"), Sprite.SCALED_SIZE * m.width, Sprite.SCALED_SIZE * m.height, false, false);

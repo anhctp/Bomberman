@@ -33,29 +33,16 @@ public class Oneal extends Enemy {
 
     public void applyAStar() {
         if (this.x % 32 == 0 && this.y % 32 == 0) {
-            Bomber bomberman = new Bomber(0, 0, Sprite.player_down.getFxImage());
-            for (Entity e : entities) {
-                if (e instanceof Bomber) {
-                    bomberman = (Bomber) e;
-                }
-            }
-
             List<List<Integer>> blocks = new ArrayList<>();
             blocks.add(new ArrayList<Integer>());
             blocks.add(new ArrayList<Integer>());
-            for (Entity entity : entities) {
-                if ((entity instanceof Bomb) || (entity instanceof Flame)) {
+            for (Entity entity : m.map) {
+                if ((entity instanceof Bomb) || (entity instanceof Wall) || (entity instanceof Brick)) {
                     blocks.get(0).add(entity.getX() / 32);
                     blocks.get(1).add(entity.getY() / 32);
                 }
             }
-            for (Entity entity : stillObjects) {
-                if ((entity instanceof Wall) || (entity instanceof Brick)) {
-                    blocks.get(0).add(entity.getX() / 32);
-                    blocks.get(1).add(entity.getY() / 32);
-                }
-            }
-            AStar aStarInit = new AStar(width, height, this.x / 32, this.y / 32, bomberman.getX() / 32, bomberman.getY() / 32, blocks);
+            AStar aStarInit = new AStar(width, height, this.x / 32, this.y / 32, (bomberman.getX() + 8) / 32, (bomberman.getY() + 8) / 32, blocks);
             aStar = aStarInit;
             aStar.process();
             if (aStar.getPath() != null) {
@@ -116,15 +103,19 @@ public class Oneal extends Enemy {
     }
 
     private int ramdomVelocity() {
-        int num = (int) (Math.random() * 4 + 1);
+        int num = (int) (Math.random() * 2 + 1);
         switch (num) {
             case 1:
+                countToChangeVelocity = 320;
                 return 1;
             case 2:
+                countToChangeVelocity = 160;
                 return 2;
             case 3:
+                countToChangeVelocity = 80;
                 return 4;
             default:
+                countToChangeVelocity = 40;
                 return 8;
         }
     }
@@ -142,11 +133,11 @@ public class Oneal extends Enemy {
                 appear = false;
             } else timeDead--;
         }
+
         if (countToChangeVelocity == 0) {
             velocity = ramdomVelocity();
-            countToChangeVelocity = 150;
         } else {
-            countToChangeVelocity--;
+            countToChangeVelocity -= velocity;
         }
         countDown();
         if (appear) {

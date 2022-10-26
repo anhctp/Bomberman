@@ -36,7 +36,7 @@ public class Menu {
             hp.setFill(Color.WHITE);
             hp.setX(512);
             hp.setY(20);
-            time = new Text("Times: 120");
+            time = new Text("Time: 120");
             time.setFont(Font.font("Arial", FontWeight.BOLD, 14));
             time.setFill(Color.WHITE);
             time.setX(608);
@@ -69,12 +69,6 @@ public class Menu {
                         hpCount = 3;
                         nextLevel = 1;
                     }
-//                        if (nextLevel == 4) {
-//                            Image image = new Image(new FileInputStream("res/img/win.png"), Sprite.SCALED_SIZE * m.width, Sprite.SCALED_SIZE * m.height, false, false);
-//                            author_view.setImage(image);
-//                            nextLevel = 1;
-//                            hpCount = 3;
-//                        }
                     m.createMap();
                     addEntities();
                     bomberman.setDead(false);

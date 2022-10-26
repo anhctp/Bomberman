@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static uet.oop.bomberman.Map.map;
+import static uet.oop.bomberman.Map.nextLevel;
 import static uet.oop.bomberman.entities.enemy.Enemy.countEnemy;
 import static uet.oop.bomberman.level.Level.isLevelUp;
 import static uet.oop.bomberman.menu.Menu.*;
@@ -41,6 +42,8 @@ public class BombermanGame extends Application {
 
     private GraphicsContext gc;
     private Canvas canvas;
+    private long last_time;
+
     static Sound sound = new Sound("res/Sound/music.wav");
 
     @Override
@@ -54,7 +57,7 @@ public class BombermanGame extends Application {
         canvas = new Canvas(Sprite.SCALED_SIZE * m.width, Sprite.SCALED_SIZE * m.height);
         canvas.setTranslateY(32);
         gc = canvas.getGraphicsContext2D();
-        Image author = new Image(new FileInputStream("res/img/author.png"), Sprite.SCALED_SIZE * m.width, Sprite.SCALED_SIZE * m.height, false, false);
+        Image author = new Image(new FileInputStream("res/img/welcome.png"), Sprite.SCALED_SIZE * m.width, Sprite.SCALED_SIZE * m.height, false, false);
         author_view = new ImageView(author);
         author_view.setX(0);
         author_view.setY(32);
@@ -73,6 +76,8 @@ public class BombermanGame extends Application {
         stage.setScene(scene);
         stage.show();
 
+        last_time = System.currentTimeMillis();
+
         AnimationTimer timer = new AnimationTimer() {
             private long lastTime = 0;
 
@@ -83,8 +88,8 @@ public class BombermanGame extends Application {
                         if (running) {
                             render();
                             if (!isPause) {
+                                time();
                                 update();
-                                //time();
                             }
                             updateMenu();
                         } else {
@@ -153,11 +158,24 @@ public class BombermanGame extends Application {
             isLevelUp = false;
         }
     }
-
+    public void time() {
+        long now = System.currentTimeMillis();
+        if (now - last_time > 1000) {
+            last_time = System.currentTimeMillis();
+            time.setText("Time: " + time_number);
+            time_number--;
+            if (time_number < 0) {
+                bomberman.setDead(true);
+                running = false;
+                time_number = 120;
+                hpCount--;
+                nextLevel--;
+            }
+        }
+    }
     public void render() {
         gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
         map.forEach(g -> g.render(gc));
-//        stillObjects.forEach(g -> g.render(gc));
         entities.forEach(g -> g.render(gc));
     }
 
