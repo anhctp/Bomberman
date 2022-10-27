@@ -62,7 +62,7 @@ Các loại Enemy trong Bomberman:
 | BOMB    | SPACE | 
 
 ## UML Diagram
-![](/Users/admin/Downloads/Work/OOP_Pro/res/img/umlDiagram.png)
+![](res/img/umlDiagram.png)
 
 ## Preview
-![](/Users/admin/Downloads/Work/OOP_Pro/res/img/previewGif.gif)
+![](res/img/previewGif.gif)
