@@ -30,8 +30,6 @@ import static uet.oop.bomberman.menu.Menu.*;
 
 public class BombermanGame extends Application {
 
-    public static final int WIDTH = 40;
-    public static final int HEIGHT = 30;
     public static List<Entity> entities = new ArrayList<>();
     public static List<Entity> stillObjects = new ArrayList<>();
     public static Map m = new Map();
@@ -159,6 +157,7 @@ public class BombermanGame extends Application {
             isLevelUp = false;
         }
     }
+
     public void time() {
         long now = System.currentTimeMillis();
         if (now - last_time > 1000) {
@@ -176,6 +175,7 @@ public class BombermanGame extends Application {
             }
         }
     }
+
     public void render() {
         gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
         map.forEach(g -> g.render(gc));

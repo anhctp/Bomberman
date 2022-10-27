@@ -17,7 +17,7 @@ public class Bomb extends Entity {
     public boolean isPlaySoundExplosion = false;
     int num = 0;
     int numFlame = 0;
-    private boolean isAcitve;
+    private boolean isActive;
     private boolean isExplode;
     private int flameLv;
 
@@ -35,8 +35,8 @@ public class Bomb extends Entity {
 
     protected List<Flame> flames = new ArrayList<>();
 
-    public boolean isAcitve() {
-        return isAcitve;
+    public boolean isActive() {
+        return isActive;
     }
 
     public Bomb(int x, int y, Image img, int flameLv) {
@@ -44,7 +44,7 @@ public class Bomb extends Entity {
         goThrough = false;
         beforeExplodeTime = 240;
         explodeTime = 100;
-        isAcitve = false;
+        isActive = false;
         isExplode = false;
         this.flameLv = flameLv;
     }
@@ -66,7 +66,7 @@ public class Bomb extends Entity {
         if (beforeExplodeTime == 0) {
             explode(x, y, m);
         }
-        if (isAcitve) {
+        if (isActive) {
             updateFlames();
         }
         if (isExplode) {
@@ -242,7 +242,7 @@ public class Bomb extends Entity {
             default:
                 break;
         }
-        isAcitve = true;
+        isActive = true;
     }
 
     @Override

@@ -5,7 +5,6 @@ import uet.oop.bomberman.entities.Wall;
 import uet.oop.bomberman.graphics.Sprite;
 
 import static uet.oop.bomberman.BombermanGame.m;
-import static uet.oop.bomberman.BombermanGame.soundEffect;
 
 public class Ghost extends Enemy {
 
@@ -49,30 +48,11 @@ public class Ghost extends Enemy {
 
     @Override
     public boolean checkLeft(Enemy enemy) {
-        return m.getEntity((enemy.getX() - enemy.getVelocity()) / 32, enemy.getY() / 32).getClass().equals(Wall.class);
+        return !m.getEntity((enemy.getX() - enemy.getVelocity()) / 32, enemy.getY() / 32).getClass().equals(Wall.class);
     }
 
     @Override
     public boolean checkRight(Enemy enemy) {
-        return m.getEntity((enemy.getX() + 2 * Sprite.DEFAULT_SIZE) / 32, (enemy.getY() + Sprite.DEFAULT_SIZE) / 32).getClass().equals(Wall.class);
-    }
-
-
-    @Override
-    public void update() {
-        if (isDead) {
-            if (!isPlaySoundDead) {
-                soundEffect("res/Sound/kill.wav");
-                isPlaySoundDead = true;
-            }
-            if (timeDead == 0) {
-                dead(this);
-                appear = false;
-            } else timeDead--;
-        }
-        countDown();
-        if (appear) {
-            logicEnemy(this);
-        }
+        return !m.getEntity((enemy.getX() + 2 * Sprite.DEFAULT_SIZE) / 32, (enemy.getY() + Sprite.DEFAULT_SIZE) / 32).getClass().equals(Wall.class);
     }
 }

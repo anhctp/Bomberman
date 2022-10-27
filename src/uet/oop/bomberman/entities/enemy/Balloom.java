@@ -3,8 +3,6 @@ package uet.oop.bomberman.entities.enemy;
 import javafx.scene.image.Image;
 import uet.oop.bomberman.graphics.Sprite;
 
-import static uet.oop.bomberman.BombermanGame.soundEffect;
-
 public class Balloom extends Enemy {
 
     public Balloom(int xUnit, int yUnit, Image img) {
@@ -35,21 +33,4 @@ public class Balloom extends Enemy {
         }
     }
 
-    @Override
-    public void update() {
-        if (isDead) {
-            if (!isPlaySoundDead) {
-                soundEffect("res/Sound/kill.wav");
-                isPlaySoundDead = true;
-            }
-            if (timeDead == 0) {
-                dead(this);
-                appear = false;
-            } else timeDead--;
-        }
-        countDown();
-        if (appear) {
-            logicEnemy(this);
-        }
-    }
 }

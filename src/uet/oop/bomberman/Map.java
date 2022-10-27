@@ -1,8 +1,6 @@
 package uet.oop.bomberman;
 
-import javafx.scene.canvas.GraphicsContext;
-import uet.oop.bomberman.entities.*;
-import uet.oop.bomberman.graphics.Sprite;
+import uet.oop.bomberman.entities.Entity;
 import uet.oop.bomberman.level.Level;
 
 import java.io.FileInputStream;
@@ -11,9 +9,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
-
-import static uet.oop.bomberman.BombermanGame.entities;
-import static uet.oop.bomberman.BombermanGame.stillObjects;
 
 public class Map {
     public static int width; // theo o
@@ -68,32 +63,6 @@ public class Map {
     public int fromPosToIndex(int x, int y) {
         return height * x + y;
     }
-
-    public void printMap(List<Entity> stillObjects, GraphicsContext gc) {
-        for (int i = 0; i < map.size(); i++) {
-            map.get(i).render(gc);
-        }
-    }
-
-    public void updateAfterExplode(int x, int y, List<Entity> stillObjects) {
-        if (getEntity(x / 32, y / 32 - 1) instanceof Brick) {
-            Grass grass = new Grass(x / 32, y / 32 - 1, Sprite.grass.getFxImage());
-            changeEntity(x / 32, y / 32 - 1, grass);
-        }
-        if (getEntity(x / 32, y / 32 + 1) instanceof Brick) {
-            Grass grass = new Grass(x / 32, y / 32 + 1, Sprite.grass.getFxImage());
-            changeEntity(x / 32, y / 32 + 1, grass);
-        }
-        if (getEntity(x / 32 - 1, y / 32) instanceof Brick) {
-            Grass grass = new Grass(x / 32 - 1, y / 32, Sprite.grass.getFxImage());
-            changeEntity(x / 32 - 1, y / 32, grass);
-        }
-        if (getEntity(x / 32 + 1, y / 32) instanceof Brick) {
-            Grass grass = new Grass(x / 32 + 1, y / 32, Sprite.grass.getFxImage());
-            changeEntity(x / 32 + 1, y / 32, grass);
-        }
-    }
-
 
     public boolean checkCollision(Entity e1, Entity e2) {
         int leftE1 = e1.getX();

@@ -26,8 +26,8 @@ public class Oneal extends Enemy {
     public void applyAStar() {
         if (this.x % 32 == 0 && this.y % 32 == 0) {
             List<List<Integer>> blocks = new ArrayList<>();
-            blocks.add(new ArrayList<Integer>());
-            blocks.add(new ArrayList<Integer>());
+            blocks.add(new ArrayList<>());
+            blocks.add(new ArrayList<>());
             for (Entity entity : m.map) {
                 if ((entity instanceof Bomb) || (entity instanceof Wall) || (entity instanceof Brick)) {
                     blocks.get(0).add(entity.getX() / 32);
@@ -94,7 +94,7 @@ public class Oneal extends Enemy {
         }
     }
 
-    private int ramdomVelocity() {
+    private int randomVelocity() {
         int num = (int) (Math.random() * 2 + 1);
         switch (num) {
             case 1:
@@ -127,7 +127,7 @@ public class Oneal extends Enemy {
         }
 
         if (countToChangeVelocity == 0) {
-            velocity = ramdomVelocity();
+            velocity = randomVelocity();
         } else {
             countToChangeVelocity -= velocity;
         }

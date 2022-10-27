@@ -7,7 +7,6 @@ import uet.oop.bomberman.graphics.Sprite;
 import static uet.oop.bomberman.BombermanGame.m;
 
 public class Flame extends Entity {
-    //    private static int time = 120;
     public Flame(int x, int y, Image img) {
         super(x, y, img);
         left = x;
@@ -15,7 +14,6 @@ public class Flame extends Entity {
         top = y;
         bottom = y + 32;
     }
-
 
     @Override
     public void update() {

@@ -3,7 +3,7 @@ package uet.oop.bomberman.entities;
 import javafx.scene.image.Image;
 import uet.oop.bomberman.graphics.Sprite;
 
-public class Brick extends Entity {
+public class Brick extends StaticEntity {
     private boolean exploded = false;
     protected boolean hasItem = false;
     protected Entity item;
@@ -16,6 +16,7 @@ public class Brick extends Entity {
         top = y;
         bottom = y + Sprite.brick.get_realHeight();
     }
+
     public Brick(int x, int y, Image img, boolean hasItem, Entity item) {
         super(x, y, img);
         goThrough = false;

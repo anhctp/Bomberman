@@ -10,7 +10,7 @@ public class AStar {
     // Cells of our grid
     private Cell[][] grid;
     // Open Cells: the set of nodes to be evaluated
-    // We put cells with lowest cost in first
+    // We put cells with the lowest cost in first
     private PriorityQueue<Cell> openCells;
     //Closed Cells: the set of nodes already evaluated
     private boolean[][] closedCells;
@@ -118,9 +118,9 @@ public class AStar {
     }
 
     public List<List<Integer>> getPath() {
-        List<List<Integer>> path = new ArrayList<List<Integer>>();
-        path.add(new ArrayList<Integer>());
-        path.add(new ArrayList<Integer>());
+        List<List<Integer>> path = new ArrayList<>();
+        path.add(new ArrayList<>());
+        path.add(new ArrayList<>());
         if (closedCells[endI][endJ]) {
             Cell current = grid[endI][endJ];
             while (current.parent != null) {

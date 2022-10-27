@@ -20,15 +20,12 @@ import static uet.oop.bomberman.Map.nextLevel;
 import static uet.oop.bomberman.menu.Menu.hpCount;
 import static uet.oop.bomberman.menu.Menu.time_number;
 
-public class Bomber extends Entity {
-    private static int STEP = 4;
-    //    private int velocity = STEP / 8;
+public class Bomber extends Character {
+    private int STEP = 4;
     private int maxBomb = 1; //
     protected int num = 0;
-    //    private boolean alive = true;
     public static List<Bomb> bombs = new ArrayList<>();
     private int flameLvOfbbm = 1;
-    private int timeBetween2Bomb = 240;
     private boolean upPressed = false;
     private boolean downPressed = false;
     private boolean leftPressed = false;
@@ -36,13 +33,7 @@ public class Bomber extends Entity {
     private boolean spacePressed = false;
     private int deadTime = 120;
 
-    private enum State {
-        UP, DOWN, LEFT, RIGHT
-    }
-
     boolean dead = true;
-    private State state = State.RIGHT;
-
     public Bomber(int x, int y, Image img) {
 
         super(x, y, img);
@@ -74,6 +65,7 @@ public class Bomber extends Entity {
         if (dead(m) || time_number == 0) {
             try {
                 if (hpCount > 0) {
+                    nextLevel--;
                     soundEffect("res/Sound/die.wav");
                     Image image = new Image(new FileInputStream("res/img/youDied.png"), Sprite.SCALED_SIZE * m.width, Sprite.SCALED_SIZE * m.height, false, false);
                     author_view.setImage(image);
@@ -107,15 +99,15 @@ public class Bomber extends Entity {
     }
 
     public void seriesOfBomb() {
-        for(int i = 0; i < bombs.size(); i++) {
-            for(int j = i+1; j < bombs.size(); j++) {
-                if(Math.abs(bombs.get(i).x - bombs.get(j).x) <= 32 && (Math.abs(bombs.get(i).y - bombs.get(j).y)) <= 32 ) {
+        for (int i = 0; i < bombs.size(); i++) {
+            for (int j = i + 1; j < bombs.size(); j++) {
+                if (Math.abs(bombs.get(i).x - bombs.get(j).x) <= 32 && (Math.abs(bombs.get(i).y - bombs.get(j).y)) <= 32) {
                     int time = Math.min(bombs.get(i).getBeforeExplodeTime(), bombs.get(j).getBeforeExplodeTime());
                     bombs.get(i).setBeforeExplodeTime(time);
                     bombs.get(j).setBeforeExplodeTime(time);
                 }
-                for(int k = 0; k < bombs.get(i).flames.size(); k++) {
-                    if(m.checkCollision(bombs.get(i).flames.get(k), bombs.get(j))) {
+                for (int k = 0; k < bombs.get(i).flames.size(); k++) {
+                    if (m.checkCollision(bombs.get(i).flames.get(k), bombs.get(j))) {
                         int time = Math.min(bombs.get(i).getBeforeExplodeTime(), bombs.get(j).getBeforeExplodeTime());
                         bombs.get(i).setBeforeExplodeTime(time);
                         bombs.get(j).setBeforeExplodeTime(time);
@@ -124,6 +116,7 @@ public class Bomber extends Entity {
             }
         }
     }
+
     public void moveUp() {
         Entity aboveLeft = m.getEntity(this.getX() / 32, (this.getY() - 1) / 32);
         Entity aboveRight = m.getEntity((this.getX() + Sprite.DEFAULT_SIZE) / 32, (this.getY() - 1) / 32);
@@ -232,7 +225,7 @@ public class Bomber extends Entity {
         if (entity instanceof FlameItem) {
             flameLvOfbbm++;
             for (Bomb b : bombs) {
-                if (!b.isAcitve()) {
+                if (!b.isActive()) {
                     b.setFlameLv(flameLvOfbbm);
                 }
             }
@@ -321,9 +314,7 @@ public class Bomber extends Entity {
         for (Entity entity : entities) {
             if (m.checkCollision(entity, this)) {
                 if (entity instanceof Enemy) {
-                    System.out.println("collision with enemy");
                     hpCount--;
-                    nextLevel--;
                     dead = true;
                     running = false;
                     setImg();
@@ -333,10 +324,7 @@ public class Bomber extends Entity {
         for (Bomb bomb : bombs) {
             for (int j = 0; j < bomb.flames.size(); j++) {
                 if (m.checkCollision(bomb.flames.get(j), this)) {
-                    System.out.println("collision with bomb");
-
                     hpCount--;
-                    nextLevel--;
                     dead = true;
                     running = false;
                     setImg();

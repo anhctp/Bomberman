@@ -1,7 +1,7 @@
 package uet.oop.bomberman.entities.enemy;
 
 import javafx.scene.image.Image;
-import uet.oop.bomberman.entities.Entity;
+import uet.oop.bomberman.entities.Character;
 import uet.oop.bomberman.entities.Grass;
 import uet.oop.bomberman.graphics.Sprite;
 
@@ -10,9 +10,10 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
-import static uet.oop.bomberman.BombermanGame.*;
+import static uet.oop.bomberman.BombermanGame.entities;
+import static uet.oop.bomberman.BombermanGame.soundEffect;
 
-public class Enemy extends Entity {
+public class Enemy extends Character {
     public static int countEnemy = 0;
     protected STATE state = null;
     protected int num = 1;
@@ -49,38 +50,6 @@ public class Enemy extends Entity {
         countEnemy++;
     }
 
-    public void moveUp() {
-        this.y -= velocity;
-    }
-
-    public void moveDown() {
-        this.y += velocity;
-    }
-
-    public void moveLeft() {
-        this.x -= velocity;
-    }
-
-    public void moveRight() {
-        this.x += velocity;
-    }
-
-
-    public boolean checkUp(Enemy enemy) {
-        return m.getEntity((enemy.getX()) / 32, (enemy.getY() - enemy.getVelocity()) / 32).goThrough;
-    }
-
-    public boolean checkDown(Enemy enemy) {
-        return m.getEntity((enemy.getX() + Sprite.DEFAULT_SIZE) / 32, (enemy.getY() + 2 * Sprite.DEFAULT_SIZE) / 32).goThrough;
-    }
-
-    public boolean checkLeft(Enemy enemy) {
-        return m.getEntity((enemy.getX() - enemy.getVelocity()) / 32, enemy.getY() / 32).goThrough;
-    }
-
-    public boolean checkRight(Enemy enemy) {
-        return m.getEntity((enemy.getX() + 2 * Sprite.DEFAULT_SIZE) / 32, (enemy.getY() + Sprite.DEFAULT_SIZE) / 32).goThrough;
-    }
 
     public void countDown() {
         if (time == 0) {
@@ -143,6 +112,19 @@ public class Enemy extends Entity {
 
     @Override
     public void update() {
-
+        if (isDead) {
+            if (!isPlaySoundDead) {
+                soundEffect("res/Sound/kill.wav");
+                isPlaySoundDead = true;
+            }
+            if (timeDead == 0) {
+                dead(this);
+                appear = false;
+            } else timeDead--;
+        }
+        countDown();
+        if (appear) {
+            logicEnemy(this);
+        }
     }
 }
