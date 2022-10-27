@@ -39,34 +39,22 @@ public class Ghost extends Enemy {
 
     @Override
     public boolean checkUp(Enemy enemy) {
-        if (m.getEntity((enemy.getX()) / 32, (enemy.getY() - enemy.getVelocity()) / 32).getClass().equals(Wall.class)) {
-            return false;
-        }
-        return true;
+        return !m.getEntity((enemy.getX()) / 32, (enemy.getY() - enemy.getVelocity()) / 32).getClass().equals(Wall.class);
     }
 
     @Override
     public boolean checkDown(Enemy enemy) {
-        if (m.getEntity((enemy.getX() + Sprite.DEFAULT_SIZE) / 32, (enemy.getY() + 2 * Sprite.DEFAULT_SIZE) / 32).getClass().equals(Wall.class)) {
-            return false;
-        }
-        return true;
+        return !m.getEntity((enemy.getX() + Sprite.DEFAULT_SIZE) / 32, (enemy.getY() + 2 * Sprite.DEFAULT_SIZE) / 32).getClass().equals(Wall.class);
     }
 
     @Override
     public boolean checkLeft(Enemy enemy) {
-        if (m.getEntity((enemy.getX() - enemy.getVelocity()) / 32, enemy.getY() / 32).getClass().equals(Wall.class)) {
-            return true;
-        }
-        return false;
+        return m.getEntity((enemy.getX() - enemy.getVelocity()) / 32, enemy.getY() / 32).getClass().equals(Wall.class);
     }
 
     @Override
     public boolean checkRight(Enemy enemy) {
-        if (m.getEntity((enemy.getX() + 2 * Sprite.DEFAULT_SIZE) / 32, (enemy.getY() + Sprite.DEFAULT_SIZE) / 32).getClass().equals(Wall.class)) {
-            return true;
-        }
-        return false;
+        return m.getEntity((enemy.getX() + 2 * Sprite.DEFAULT_SIZE) / 32, (enemy.getY() + Sprite.DEFAULT_SIZE) / 32).getClass().equals(Wall.class);
     }
 
 

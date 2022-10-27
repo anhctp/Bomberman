@@ -1,14 +1,8 @@
 package uet.oop.bomberman.AI;
 
-import uet.oop.bomberman.AI.Cell;
-
-import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.PriorityQueue;
-
-import static uet.oop.bomberman.Map.*;
 
 public class AStar {
     //costs for vertical / horizontal moves

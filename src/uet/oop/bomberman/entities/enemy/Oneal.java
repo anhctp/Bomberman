@@ -18,14 +18,6 @@ public class Oneal extends Enemy {
 
     private int countToChangeVelocity = 150;
 
-    public AStar getAStar() {
-        return aStar;
-    }
-
-    public void setAStar(AStar aStar) {
-        this.aStar = aStar;
-    }
-
     public Oneal(int xUnit, int yUnit, Image img) {
         super(xUnit, yUnit, img);
         velocity = 4;

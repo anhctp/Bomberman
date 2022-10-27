@@ -1,15 +1,8 @@
 package uet.oop.bomberman.entities;
 
-import javafx.scene.SnapshotParameters;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.paint.Color;
-import uet.oop.bomberman.Map;
 import uet.oop.bomberman.graphics.Sprite;
-
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 
 public abstract class Entity {
     //Tọa độ X tính từ góc trái trên trong Canvas
@@ -56,9 +49,6 @@ public abstract class Entity {
         return velocity;
     }
 
-    public void setVelocity(int velocity) {
-        this.velocity = velocity;
-    }
     //public abstract void update(Map m);
 
     public int getX() {

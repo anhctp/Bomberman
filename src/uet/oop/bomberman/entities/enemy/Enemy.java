@@ -22,7 +22,6 @@ public class Enemy extends Entity {
     protected boolean isDead = false;
     protected boolean isPlaySoundDead = false;
 
-
     public enum STATE {
         UP,
         DOWN,
@@ -41,20 +40,8 @@ public class Enemy extends Entity {
         }
     }
 
-    public STATE getState() {
-        return state;
-    }
-
     public void setState(STATE state) {
         this.state = state;
-    }
-
-    public int getNum() {
-        return num;
-    }
-
-    public void setNum(int num) {
-        this.num = num;
     }
 
     public Enemy(int xUnit, int yUnit, Image img) {
@@ -80,35 +67,19 @@ public class Enemy extends Entity {
 
 
     public boolean checkUp(Enemy enemy) {
-//        if (getEntity((entity.getX() + Sprite.DEFAULT_SIZE) / 32, (entity.getY() - entity.getVelocity()) / 32).goThrough) {
-        if (m.getEntity((enemy.getX()) / 32, (enemy.getY() - enemy.getVelocity()) / 32).goThrough) {
-            return true;
-        }
-        return false;
+        return m.getEntity((enemy.getX()) / 32, (enemy.getY() - enemy.getVelocity()) / 32).goThrough;
     }
 
     public boolean checkDown(Enemy enemy) {
-//        if (getEntity((entity.getX() + Sprite.DEFAULT_SIZE) / 32, (entity.getY() + entity.getVelocity() + Sprite.SCALED_SIZE) / 32).goThrough) {
-        if (m.getEntity((enemy.getX() + Sprite.DEFAULT_SIZE) / 32, (enemy.getY()  + 2 * Sprite.DEFAULT_SIZE) / 32).goThrough) {
-            return true;
-        }
-        return false;
+        return m.getEntity((enemy.getX() + Sprite.DEFAULT_SIZE) / 32, (enemy.getY() + 2 * Sprite.DEFAULT_SIZE) / 32).goThrough;
     }
 
     public boolean checkLeft(Enemy enemy) {
-        //if (getEntity((entity.getX() - entity.getVelocity()) / 32, entity.getY() / 32).goThrough) {
-        if (m.getEntity((enemy.getX() - enemy.getVelocity()) / 32, enemy.getY() / 32).goThrough) {
-            return true;
-        }
-        return false;
+        return m.getEntity((enemy.getX() - enemy.getVelocity()) / 32, enemy.getY() / 32).goThrough;
     }
 
     public boolean checkRight(Enemy enemy) {
-        //if (getEntity((entity.getX() + entity.getVelocity() + Sprite.SCALED_SIZE) / 32, (entity.getY() + Sprite.DEFAULT_SIZE) / 32).goThrough) {
-        if (m.getEntity((enemy.getX()  + 2 * Sprite.DEFAULT_SIZE) / 32, (enemy.getY() + Sprite.DEFAULT_SIZE) / 32).goThrough) {
-            return true;
-        }
-        return false;
+        return m.getEntity((enemy.getX() + 2 * Sprite.DEFAULT_SIZE) / 32, (enemy.getY() + Sprite.DEFAULT_SIZE) / 32).goThrough;
     }
 
     public void countDown() {

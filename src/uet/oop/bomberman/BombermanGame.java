@@ -99,6 +99,7 @@ public class BombermanGame extends Application {
                             entities.clear();
                             stillObjects.clear();
                             bomberman.bombs.clear();
+                            time();
                             updateMenu();
                             render();
                         }
@@ -164,12 +165,14 @@ public class BombermanGame extends Application {
             last_time = System.currentTimeMillis();
             time.setText("Time: " + time_number);
             time_number--;
-            if (time_number < 0) {
+            if (time_number < 0 || bomberman.isDead()) {
                 bomberman.setDead(true);
                 running = false;
                 time_number = 120;
-                hpCount--;
-                nextLevel--;
+                if (time_number < 0) {
+                    hpCount--;
+                    nextLevel--;
+                }
             }
         }
     }

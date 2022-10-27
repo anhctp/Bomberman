@@ -3,8 +3,6 @@ package uet.oop.bomberman.entities;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
-import uet.oop.bomberman.BombermanGame;
-import uet.oop.bomberman.KeyHandler;
 import uet.oop.bomberman.Map;
 import uet.oop.bomberman.entities.enemy.Enemy;
 import uet.oop.bomberman.entities.items.BombItem;
@@ -12,13 +10,10 @@ import uet.oop.bomberman.entities.items.FlameItem;
 import uet.oop.bomberman.entities.items.SpeedItem;
 import uet.oop.bomberman.graphics.Sprite;
 
-import javax.swing.plaf.basic.BasicTreeUI;
-import java.awt.event.KeyEvent;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import static uet.oop.bomberman.BombermanGame.*;
 import static uet.oop.bomberman.Map.nextLevel;
@@ -30,7 +25,6 @@ public class Bomber extends Entity {
     //    private int velocity = STEP / 8;
     private int maxBomb = 1; //
     protected int num = 0;
-    public KeyHandler keyHandler;
     //    private boolean alive = true;
     public static List<Bomb> bombs = new ArrayList<>();
     private int flameLvOfbbm = 1;
@@ -76,7 +70,7 @@ public class Bomber extends Entity {
                 bombs.remove(bombs.get(i));
             }
         }
-
+        seriesOfBomb();
         if (dead(m) || time_number == 0) {
             try {
                 if (hpCount > 0) {
@@ -112,6 +106,24 @@ public class Bomber extends Entity {
 
     }
 
+    public void seriesOfBomb() {
+        for(int i = 0; i < bombs.size(); i++) {
+            for(int j = i+1; j < bombs.size(); j++) {
+                if(Math.abs(bombs.get(i).x - bombs.get(j).x) <= 32 && (Math.abs(bombs.get(i).y - bombs.get(j).y)) <= 32 ) {
+                    int time = Math.min(bombs.get(i).getBeforeExplodeTime(), bombs.get(j).getBeforeExplodeTime());
+                    bombs.get(i).setBeforeExplodeTime(time);
+                    bombs.get(j).setBeforeExplodeTime(time);
+                }
+                for(int k = 0; k < bombs.get(i).flames.size(); k++) {
+                    if(m.checkCollision(bombs.get(i).flames.get(k), bombs.get(j))) {
+                        int time = Math.min(bombs.get(i).getBeforeExplodeTime(), bombs.get(j).getBeforeExplodeTime());
+                        bombs.get(i).setBeforeExplodeTime(time);
+                        bombs.get(j).setBeforeExplodeTime(time);
+                    }
+                }
+            }
+        }
+    }
     public void moveUp() {
         Entity aboveLeft = m.getEntity(this.getX() / 32, (this.getY() - 1) / 32);
         Entity aboveRight = m.getEntity((this.getX() + Sprite.DEFAULT_SIZE) / 32, (this.getY() - 1) / 32);
@@ -154,12 +166,12 @@ public class Bomber extends Entity {
         int count = 0;
         int cnt1 = 0;
         int cnt2 = 0;
-        while ((above.goThrough == false) && ((above.y + 32 - y) <= 15) && cnt1 < 15) {
+        while ((!above.goThrough) && ((above.y + 32 - y) <= 15) && cnt1 < 15) {
             y++;
             cnt1++;
             above = m.getEntity((this.getX() + Sprite.player_right.get_realWidth() * 2 + 1) / 32, (this.getY() + 1) / 32);
         }
-        while ((under.goThrough == false) && ((y + 32 - under.y) <= 15) && (cnt2 < 10)) {
+        while ((!under.goThrough) && ((y + 32 - under.y) <= 15) && (cnt2 < 10)) {
             y--;
             cnt2++;
             under = m.getEntity((this.getX() + Sprite.player_right.get_realWidth() * 2 + 1) / 32, (this.getY() + Sprite.player_right.get_realHeight() * 2 - 1) / 32);
@@ -184,12 +196,12 @@ public class Bomber extends Entity {
         int count = 0;
         int cnt1 = 0;
         int cnt2 = 0;
-        while ((above.goThrough == false) && ((above.y + 32 - y) <= 15) && cnt1 < 15) {
+        while ((!above.goThrough) && ((above.y + 32 - y) <= 15) && cnt1 < 15) {
             y++;
             cnt1++;
             above = m.getEntity((this.getX() + Sprite.player_right.get_realWidth() * 2 + 1) / 32, (this.getY() + 1) / 32);
         }
-        while ((under.goThrough == false) && ((y + 32 - under.y) <= 15) && (cnt2 < 10)) {
+        while ((!under.goThrough) && ((y + 32 - under.y) <= 15) && (cnt2 < 10)) {
             y--;
             cnt2++;
             under = m.getEntity((this.getX() + Sprite.player_right.get_realWidth() * 2 + 1) / 32, (this.getY() + Sprite.player_right.get_realHeight() * 2 - 1) / 32);
@@ -208,7 +220,7 @@ public class Bomber extends Entity {
         setImg();
     }
 
-    public boolean checkItem(Entity entity, Entity grass) {
+    public boolean checkItem(Entity entity) {
         if (entity instanceof SpeedItem) {
             STEP += 2;
             return true;
@@ -220,7 +232,7 @@ public class Bomber extends Entity {
         if (entity instanceof FlameItem) {
             flameLvOfbbm++;
             for (Bomb b : bombs) {
-                if (b.isAcitve() == false) {
+                if (!b.isAcitve()) {
                     b.setFlameLv(flameLvOfbbm);
                 }
             }
@@ -232,25 +244,25 @@ public class Bomber extends Entity {
     public void handleEvent(Map m, List<Entity> entities, GraphicsContext gc) {
         if (upPressed) {
             Entity grass1 = new Grass(this.getX() / 32, (this.getY()) / 32, Sprite.grass.getFxImage());
-            if (checkItem(m.getEntity(this.getX() / 32, this.getY() / 32), grass1)) {
+            if (checkItem(m.getEntity(this.getX() / 32, this.getY() / 32))) {
                 soundEffect("res/Sound/item.wav");
                 m.changeEntity(this.getX() / 32, this.getY() / 32, grass1);
             }
         } else if (downPressed) {
             Entity grass2 = new Grass(this.getX() / 32, (this.getY() + Sprite.player_down.get_realHeight() * 2) / 32, Sprite.grass.getFxImage());
-            if (checkItem(m.getEntity(this.getX() / 32, (this.getY() + Sprite.player_down.get_realHeight() * 2) / 32), grass2)) {
+            if (checkItem(m.getEntity(this.getX() / 32, (this.getY() + Sprite.player_down.get_realHeight() * 2) / 32))) {
                 soundEffect("res/Sound/item.wav");
                 m.changeEntity(this.getX() / 32, (this.getY() + Sprite.player_down.get_realHeight() * 2) / 32, grass2);
             }
         } else if (leftPressed) {
             Entity grass3 = new Grass(this.getX() / 32, (this.getY()) / 32, Sprite.grass.getFxImage());
-            if (checkItem(m.getEntity(this.getX() / 32, this.getY() / 32), grass3)) {
+            if (checkItem(m.getEntity(this.getX() / 32, this.getY() / 32))) {
                 soundEffect("res/Sound/item.wav");
                 m.changeEntity(this.getX() / 32, this.getY() / 32, grass3);
             }
         } else if (rightPressed) {
             Entity grass4 = new Grass((this.getX() + Sprite.player_right.get_realWidth() * 2) / 32, (this.getY()) / 32, Sprite.grass.getFxImage());
-            if (checkItem(m.getEntity((this.getX() + Sprite.player_right.get_realWidth() * 2) / 32, this.getY() / 32), grass4)) {
+            if (checkItem(m.getEntity((this.getX() + Sprite.player_right.get_realWidth() * 2) / 32, this.getY() / 32))) {
                 soundEffect("res/Sound/item.wav");
                 m.changeEntity((this.getX() + Sprite.player_right.get_realWidth() * 2) / 32, this.getY() / 32, grass4);
             }
@@ -306,9 +318,10 @@ public class Bomber extends Entity {
     }
 
     public boolean dead(Map m) {
-        for (int i = 0; i < entities.size(); i++) {
-            if (m.checkCollision(entities.get(i), this)) {
-                if (entities.get(i) instanceof Enemy) {
+        for (Entity entity : entities) {
+            if (m.checkCollision(entity, this)) {
+                if (entity instanceof Enemy) {
+                    System.out.println("collision with enemy");
                     hpCount--;
                     nextLevel--;
                     dead = true;
@@ -317,9 +330,11 @@ public class Bomber extends Entity {
                 }
             }
         }
-        for (int i = 0; i < bombs.size(); i++) {
-            for (int j = 0; j < bombs.get(i).flames.size(); j++) {
-                if (m.checkCollision(bombs.get(i).flames.get(j), this)) {
+        for (Bomb bomb : bombs) {
+            for (int j = 0; j < bomb.flames.size(); j++) {
+                if (m.checkCollision(bomb.flames.get(j), this)) {
+                    System.out.println("collision with bomb");
+
                     hpCount--;
                     nextLevel--;
                     dead = true;
@@ -328,7 +343,7 @@ public class Bomber extends Entity {
                 }
                 for (int k = 0; k < m.getObjects().size(); k++) {
                     if (m.getObjects().get(k) instanceof Enemy) {
-                        if (m.checkCollision(bombs.get(i).flames.get(j), m.getObjects().get(k))) {
+                        if (m.checkCollision(bomb.flames.get(j), m.getObjects().get(k))) {
                             ((Enemy) m.getObjects().get(k)).setState(Enemy.STATE.DEAD);
                         }
                     }
@@ -364,40 +379,33 @@ public class Bomber extends Entity {
 
     public void setImg() {
         if (dead) {
-            this.img = Sprite.movingSprite(Sprite.player_dead1, Sprite.player_dead2, Sprite.player_dead3, num, 30).getFxImage();
+            this.img = Sprite.movingSprite(Sprite.player_dead1, Sprite.player_dead2, Sprite.player_dead3, num, 20).getFxImage();
         } else {
 
             if (upPressed) {
                 if (num < 7500) {
                     num++;
                 } else num = 0;
-                this.img = Sprite.movingSprite(Sprite.player_up, Sprite.player_up_1, Sprite.player_up_2, num, 30).getFxImage();
+                this.img = Sprite.movingSprite(Sprite.player_up, Sprite.player_up_1, Sprite.player_up_2, num, 20).getFxImage();
             }
             if (downPressed) {
                 if (num < 7500) {
                     num++;
                 } else num = 0;
-                this.img = Sprite.movingSprite(Sprite.player_down, Sprite.player_down_1, Sprite.player_down_2, num, 30).getFxImage();
+                this.img = Sprite.movingSprite(Sprite.player_down, Sprite.player_down_1, Sprite.player_down_2, num, 20).getFxImage();
             }
             if (leftPressed) {
                 if (num < 7500) {
                     num++;
                 } else num = 0;
-                this.img = Sprite.movingSprite(Sprite.player_left, Sprite.player_left_1, Sprite.player_left_2, num, 30).getFxImage();
+                this.img = Sprite.movingSprite(Sprite.player_left, Sprite.player_left_1, Sprite.player_left_2, num, 20).getFxImage();
             }
             if (rightPressed) {
                 if (num < 7500) {
                     num++;
                 } else num = 0;
-                this.img = Sprite.movingSprite(Sprite.player_right, Sprite.player_right_1, Sprite.player_right_2, num, 30).getFxImage();
+                this.img = Sprite.movingSprite(Sprite.player_right, Sprite.player_right_1, Sprite.player_right_2, num, 20).getFxImage();
             }
-//            if(spacePressed) {
-//                System.out.println("go here");
-//                if(num < 7500) {
-//                    num++;
-//                } else num = 0;
-//                this.img = Sprite.movingSprite(Sprite.bomb, Sprite.bomb_1, Sprite.bomb_2, num, 30).getFxImage();
-//            }
         }
     }
 }

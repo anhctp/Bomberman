@@ -2,29 +2,35 @@ package uet.oop.bomberman.entities;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
-import uet.oop.bomberman.BombermanGame;
-import uet.oop.bomberman.Map;
 import uet.oop.bomberman.Map;
 import uet.oop.bomberman.graphics.Sprite;
 
-import javax.swing.plaf.synth.SynthRootPaneUI;
 import java.util.ArrayList;
 import java.util.List;
 
-import static uet.oop.bomberman.BombermanGame.*;
-import static uet.oop.bomberman.Map.map;
+import static uet.oop.bomberman.BombermanGame.m;
+import static uet.oop.bomberman.BombermanGame.soundEffect;
 
 public class Bomb extends Entity {
     private int beforeExplodeTime;
     private int explodeTime;
     public boolean isPlaySoundExplosion = false;
+    int num = 0;
+    int numFlame = 0;
+    private boolean isAcitve;
+    private boolean isExplode;
+    private int flameLv;
+
+    public void setBeforeExplodeTime(int beforeExplodeTime) {
+        this.beforeExplodeTime = beforeExplodeTime;
+    }
+
+    public int getBeforeExplodeTime() {
+        return beforeExplodeTime;
+    }
 
     public void setFlameLv(int flameLv) {
         this.flameLv = flameLv;
-    }
-
-    public int getFlameLv() {
-        return flameLv;
     }
 
     protected List<Flame> flames = new ArrayList<>();
@@ -32,13 +38,6 @@ public class Bomb extends Entity {
     public boolean isAcitve() {
         return isAcitve;
     }
-
-    int num = 0;
-    int numFlame = 0;
-    private boolean isAcitve;
-    private boolean isExplode;
-    private static int timeBetween2Bomb = 240;
-    private int flameLv;
 
     public Bomb(int x, int y, Image img, int flameLv) {
         super(x, y, img);
@@ -49,7 +48,6 @@ public class Bomb extends Entity {
         isExplode = false;
         this.flameLv = flameLv;
     }
-
 
     public boolean getIsExplode() {
         return isExplode;
@@ -68,13 +66,12 @@ public class Bomb extends Entity {
         if (beforeExplodeTime == 0) {
             explode(x, y, m);
         }
-
         if (isAcitve) {
             updateFlames();
         }
         if (isExplode) {
             if (m.getEntity(x / 32, y / 32 - 1) instanceof Brick) {
-                if (((Brick) m.getEntity(x / 32, y / 32 - 1)).hasItem == true) {
+                if (((Brick) m.getEntity(x / 32, y / 32 - 1)).hasItem) {
                     m.changeEntity(x / 32, y / 32 - 1, ((Brick) m.getEntity(x / 32, y / 32 - 1)).item);
                 } else {
                     Grass grass = new Grass(x / 32, y / 32 - 1, Sprite.grass.getFxImage());
@@ -82,7 +79,7 @@ public class Bomb extends Entity {
                 }
             }
             if (m.getEntity(x / 32, y / 32 + 1) instanceof Brick) {
-                if (((Brick) m.getEntity(x / 32, y / 32 + 1)).hasItem == true) {
+                if (((Brick) m.getEntity(x / 32, y / 32 + 1)).hasItem) {
                     m.changeEntity(x / 32, y / 32 + 1, ((Brick) m.getEntity(x / 32, y / 32 + 1)).item);
                 } else {
                     Grass grass = new Grass(x / 32, y / 32 + 1, Sprite.grass.getFxImage());
@@ -90,7 +87,7 @@ public class Bomb extends Entity {
                 }
             }
             if (m.getEntity(x / 32 - 1, y / 32) instanceof Brick) {
-                if (((Brick) m.getEntity(x / 32 - 1, y / 32)).hasItem == true) {
+                if (((Brick) m.getEntity(x / 32 - 1, y / 32)).hasItem) {
                     m.changeEntity(x / 32 - 1, y / 32, ((Brick) m.getEntity(x / 32 - 1, y / 32)).item);
                 } else {
                     Grass grass = new Grass(x / 32 - 1, y / 32, Sprite.grass.getFxImage());
@@ -98,7 +95,7 @@ public class Bomb extends Entity {
                 }
             }
             if (m.getEntity(x / 32 + 1, y / 32) instanceof Brick) {
-                if (((Brick) m.getEntity(x / 32 + 1, y / 32)).hasItem == true) {
+                if (((Brick) m.getEntity(x / 32 + 1, y / 32)).hasItem) {
                     m.changeEntity(x / 32 + 1, y / 32, ((Brick) m.getEntity(x / 32 + 1, y / 32)).item);
                 } else {
                     Grass grass = new Grass(x / 32 + 1, y / 32, Sprite.grass.getFxImage());
@@ -132,7 +129,6 @@ public class Bomb extends Entity {
             soundEffect("res/Sound/bomb.wav");
             isPlaySoundExplosion = true;
         }
-        List<Flame> f = new ArrayList<>();
         Flame flameCenter;
         Flame flameAbove1;
         Flame flameUnder1;
@@ -143,11 +139,6 @@ public class Bomb extends Entity {
         Flame flameUnder2;
         Flame flameLeft2;
         Flame flameRight2;
-
-        Flame flameAbove3;
-        Flame flameUnder3;
-        Flame flameLeft3;
-        Flame flameRight3;
 
         switch (flameLv) {
             case 1:
@@ -248,62 +239,6 @@ public class Bomb extends Entity {
                     }
                 }
                 break;
-
-            case 3:
-                flameCenter = new Flame(x / 32, y / 32, Sprite.bomb_exploded2.getFxImage());
-                flameAbove1 = new Flame(x / 32, y / 32 - 1, Sprite.explosion_vertical2.getFxImage());
-                flameUnder1 = new Flame(x / 32, y / 32 + 1, Sprite.explosion_vertical2.getFxImage());
-                flameLeft1 = new Flame(x / 32 - 1, y / 32, Sprite.explosion_horizontal2.getFxImage());
-                flameRight1 = new Flame(x / 32 + 1, y / 32, Sprite.explosion_horizontal2.getFxImage());
-
-                if (!(m.getEntity(x / 32, y / 32 - 1) instanceof Brick)
-                        && !(m.getEntity(x / 32, y / 32 - 1) instanceof Wall)) {
-                    flameAbove2 = new Flame(x / 32, y / 32 - 2, Sprite.explosion_vertical_top_last1.getFxImage());
-                    flames.add(flameAbove2);
-                }
-                if (!(m.getEntity(x / 32, y / 32 + 1) instanceof Brick)
-                        && !(m.getEntity(x / 32, y / 32 + 1) instanceof Wall)) {
-                    flameUnder2 = new Flame(x / 32, y / 32 + 2, Sprite.explosion_vertical_down_last1.getFxImage());
-                    flames.add(flameUnder2);
-                }
-                if (!(m.getEntity(x / 32 - 1, y / 32) instanceof Brick)
-                        && !(m.getEntity(x / 32 - 1, y / 32) instanceof Wall)) {
-                    flameLeft2 = new Flame(x / 32 - 2, y / 32, Sprite.explosion_horizontal_left_last1.getFxImage());
-                    flames.add(flameLeft2);
-                }
-                if (!(m.getEntity(x / 32 + 1, y / 32) instanceof Brick)
-                        && !(m.getEntity(x / 32 + 1, y / 32) instanceof Wall)) {
-                    flameRight2 = new Flame(x / 32 + 2, y / 32, Sprite.explosion_horizontal_right_last1.getFxImage());
-                    flames.add(flameRight2);
-                }
-
-                if ((m.getEntity(x / 32, y / 32 - 1) instanceof Grass)
-                        && (m.getEntity(x / 32, y / 32 - 2) instanceof Grass)) {
-                    flameAbove3 = new Flame(x / 32, y / 32 - 3, Sprite.explosion_vertical_top_last2.getFxImage());
-                    flames.add(flameAbove3);
-                }
-                if ((m.getEntity(x / 32, y / 32 + 1) instanceof Grass)
-                        && (m.getEntity(x / 32, y / 32 + 2) instanceof Grass)) {
-                    flameUnder3 = new Flame(x / 32, y / 32 + 3, Sprite.explosion_vertical_down_last2.getFxImage());
-                    flames.add(flameUnder3);
-                }
-                if ((m.getEntity(x / 32 - 1, y / 32) instanceof Grass)
-                        && (m.getEntity(x / 32 - 2, y / 32) instanceof Grass)) {
-                    flameLeft3 = new Flame(x / 32 - 3, y / 32, Sprite.explosion_horizontal_left_last2.getFxImage());
-                    flames.add(flameLeft3);
-                }
-                if ((m.getEntity(x / 32, y / 32 + 1) instanceof Grass)
-                        && (m.getEntity(x / 32, y / 32 + 2) instanceof Grass)) {
-                    flameRight3 = new Flame(x / 32 + 3, y / 32, Sprite.explosion_horizontal_right_last2.getFxImage());
-                    flames.add(flameRight3);
-                }
-
-                flames.add(flameCenter);
-                flames.add(flameAbove1);
-                flames.add(flameUnder1);
-                flames.add(flameLeft1);
-                flames.add(flameRight1);
-                break;
             default:
                 break;
         }
@@ -333,24 +268,24 @@ public class Bomb extends Entity {
     }
 
     public void setFlameImg(Flame flame, int direction) {
+        if (numFlame < 360) {
+            numFlame++;
+        } else numFlame = 0;
         switch (direction) {
             case 0:
-                if (numFlame < 7500) {
-                    numFlame++;
-                } else numFlame = 0;
-                flame.img = Sprite.movingSprite(Sprite.bomb_exploded, Sprite.bomb_exploded1, Sprite.bomb_exploded2, numFlame, 60).getFxImage();
+                flame.img = Sprite.movingSprite(Sprite.bomb_exploded, Sprite.bomb_exploded1, Sprite.bomb_exploded2, numFlame, 120).getFxImage();
                 break;
             case 1:
-                flame.img = Sprite.movingSprite(Sprite.explosion_vertical_top_last, Sprite.explosion_vertical_top_last1, Sprite.explosion_vertical_top_last2, numFlame, 60).getFxImage();
+                flame.img = Sprite.movingSprite(Sprite.explosion_vertical_top_last, Sprite.explosion_vertical_top_last1, Sprite.explosion_vertical_top_last2, numFlame, 120).getFxImage();
                 break;
             case 2:
-                flame.img = Sprite.movingSprite(Sprite.explosion_horizontal_right_last, Sprite.explosion_horizontal_right_last1, Sprite.explosion_horizontal_right_last2, numFlame, 60).getFxImage();
+                flame.img = Sprite.movingSprite(Sprite.explosion_horizontal_right_last, Sprite.explosion_horizontal_right_last1, Sprite.explosion_horizontal_right_last2, numFlame, 120).getFxImage();
                 break;
             case 3:
-                flame.img = Sprite.movingSprite(Sprite.explosion_vertical_down_last, Sprite.explosion_vertical_down_last1, Sprite.explosion_vertical_down_last2, numFlame, 60).getFxImage();
+                flame.img = Sprite.movingSprite(Sprite.explosion_vertical_down_last, Sprite.explosion_vertical_down_last1, Sprite.explosion_vertical_down_last2, numFlame, 120).getFxImage();
                 break;
             case 4:
-                flame.img = Sprite.movingSprite(Sprite.explosion_horizontal_left_last, Sprite.explosion_horizontal_left_last1, Sprite.explosion_horizontal_left_last2, numFlame, 60).getFxImage();
+                flame.img = Sprite.movingSprite(Sprite.explosion_horizontal_left_last, Sprite.explosion_horizontal_left_last1, Sprite.explosion_horizontal_left_last2, numFlame, 120).getFxImage();
                 break;
         }
     }
